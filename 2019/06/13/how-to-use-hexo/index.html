@@ -436,17 +436,17 @@ $ brew install node
 <p>写在前面：</p>
 </blockquote>
 <h4 id="安装篇"><a href="#安装篇" class="headerlink" title="安装篇"></a>安装篇</h4><p>Hexo依赖于 nodejs 和 git， 先安装依赖文件。</p>
-<pre class="line-numbers language-lang-bash"><code class="language-lang-bash"># For mac with brew
+<pre><code class="bash"># For mac with brew
 $ brew install git
 $ brew install node
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <p>然后安装 <code>hexo-cli</code></p>
-<pre class="line-numbers language-lang-bash"><code class="language-lang-bash">$ npm install -g hexo-cli
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="bash">$ npm install -g hexo-cli
+</code></pre>
 <p>安装好后我们就可以使用 <code>hexo</code> 命令来建站、添加内容、生成静态文件，但还不能本地预览和远程发布。本地预览需要先安装服务器<code>hexo-server</code>；远程发布需要安装部署服务（deployer）。</p>
 <h4 id="初探"><a href="#初探" class="headerlink" title="初探"></a>初探</h4><p>现在我们开始建第一个网站：</p>
-<pre class="line-numbers language-lang-bash"><code class="language-lang-bash">$ hexo init me # me为站点目录，用于存放hexo相关初始化文件，用户可指定任意其他名称
-<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre><code class="bash">$ hexo init me # me为站点目录，用于存放hexo相关初始化文件，用户可指定任意其他名称
+</code></pre>
 <p>该命令会在当前目录下新建 <code>me</code> 文件夹，并下载hexo需要的初始化文件到改目录。新建完成后，指定目录内容如下：</p>
 <pre><code>.
 ├── _config.yml
@@ -456,7 +456,8 @@ $ brew install node
 |   ├── _drafts
 |   └── _posts
 └── themes
-</code></pre><p>各文件和目录的含义见：<a href="https://hexo.io/zh-cn/docs/setup" target="_blank" rel="noopener">Hexo文档 — 建站</a></p>
+</code></pre>
+<p>各文件和目录的含义见：<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/setup">Hexo文档 — 建站</a></p>
 <p>下面新建我们的第一个博客文档：<code>hexo new &quot;how to use hexo&quot;</code> , 该命令会在目录<code>source/_post</code> 下新建 <code>how-to-use-hexo.md</code> 文件。<em>注意：新建的makrdown文档命名时考虑到了同名冲突问题，用户可自行测试。</em></p>
 <p>通过 <code>hexo new</code>命令新建的markdown文件现处于纯文档状态，没有经过渲染和静态化处理。我们可以使用 <code>hexo generate</code> 或者简写形式 <code>hexo g</code> 使用主题渲染markdown文件、生成html静态文件。该命令会在站点目录下新建 <code>public</code> 目录并按规则将渲染后的html静态文件放置在该目录相应的子目录下，同时准备好其他 js脚本文件和css样式文件。</p>
 <pre><code>public/
@@ -466,20 +467,21 @@ $ brew install node
 ├── fancybox
 ├── index.html
 └── js
-</code></pre><p>渲染markdown文件使用的默认主题在 <code>_config.yml</code> 中定义：</p>
-<pre class="line-numbers language-lang-ymal"><code class="language-lang-ymal"># Extensions
+</code></pre>
+<p>渲染markdown文件使用的默认主题在 <code>_config.yml</code> 中定义：</p>
+<pre><code class="ymal"># Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
 theme: landscape
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <p>到目前为止，Hexo已经为我们准备好了静态化的经渲染的页面，我们可以将public目录下的文件发布（通过hexo自带的发布器或者直接拷贝）到服务器上对外展示。我们也可以启动 hexo server 开启本地预览服务器，关于本地预览服务器查看服务器篇。</p>
 <h4 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h4><ol>
-<li><a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="noopener">Hexo官方文档</a></li>
-<li><a href="https://www.jianshu.com/p/84a8384be1ae" target="_blank" rel="noopener">Hexo使用指南</a></li>
-<li><a href="https://segmentfault.com/a/1190000010680022" target="_blank" rel="noopener">Hexo 个人博客部署到 CentOS 个人服务器</a></li>
-<li><a href="https://www.simon96.online/2018/10/12/hexo-tutorial/" target="_blank" rel="noopener">最全Hexo博客搭建</a></li>
-<li><a href="[http://jayveehe.github.io/2014/11/08/hexo-question-summarize/](http://jayveehe.github.io/2014/11/08/hexo-question-summarize/">用Hexo建立Github Page——你可能会遇到的问题</a>)</li>
-<li><a href="https://blog.csdn.net/qq_21808961/article/details/84476504" target="_blank" rel="noopener">hexo d命令报错 ERROR Deployer not found: git</a></li>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/84a8384be1ae">Hexo使用指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000010680022">Hexo 个人博客部署到 CentOS 个人服务器</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.simon96.online/2018/10/12/hexo-tutorial/">最全Hexo博客搭建</a></li>
+<li><a href="%5Bhttp://jayveehe.github.io/2014/11/08/hexo-question-summarize/%5D(http://jayveehe.github.io/2014/11/08/hexo-question-summarize/)">用Hexo建立Github Page——你可能会遇到的问题</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_21808961/article/details/84476504">hexo d命令报错 ERROR Deployer not found: git</a></li>
 </ol>
 
             </div>
@@ -661,15 +663,13 @@ theme: landscape
 
 
 
-
 配置文件
 说明信息
 
 
 
-
 /etc/gitconfig
-system级别的配置信
+system级别的配置信息，
                         
                     </div>
                     <div class="publish-info">

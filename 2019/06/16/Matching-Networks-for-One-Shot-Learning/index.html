@@ -435,21 +435,15 @@ Oriol Vinyals, Charles Blundell, Timothy Lillicrap, Koray Kavukcuoglu, Daan Wier
             <div id="articleContent">
                 <h3 id="Matching-Networks-for-One-Shot-Learning"><a href="#Matching-Networks-for-One-Shot-Learning" class="headerlink" title="Matching Networks for One Shot Learning"></a>Matching Networks for One Shot Learning</h3><blockquote>
 <p>Oriol Vinyals, Charles Blundell, Timothy Lillicrap, Koray Kavukcuoglu, Daan Wierstra</p>
-<p><a href="https://arxiv.org/abs/1606.04080" target="_blank" rel="noopener">https://arxiv.org/abs/1606.04080</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1606.04080">https://arxiv.org/abs/1606.04080</a></p>
 </blockquote>
 <p>“<em>Many groups have investigated ways to augment NN architectures with external memories and other components. In these models, often a fully differentiable neural attention mechanism is defined to access a memory matrix which stores usefule information to solve the task at hand</em>“</p>
 <p><strong>Train &amp; test condition must match</strong>: we train the network by showing only a few examples per class, switching the task from minibatch to minibatch, muche like how it will be tested when presented with a few examples of a new task.</p>
 <h4 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h4><p><img src="https://i.loli.net/2019/06/16/5d065792df9de77166.png" alt="Matching Networks architecture"></p>
-<p>We wish to map from a small support set of $k$ examples of image-label pairs $S={\{(x_i,y_i)\}}_{i=1}^k$ to a classifier $c_S$ which,  given a test example $\hat{x}$ , defines the probability distribution over outputs $\hat{y}$ . Our model computes $\hat{y}$ as follows:</p>
-<script type="math/tex; mode=display">
-\displaystyle 
-
-\hat{y} = \sum_{i=1}^k \alpha(\hat{x},x_i)y_i</script><p>where $(x_i,y_i)$ are samples in the support set $S$ , and $\alpha$ is an attention mechanism, e.g. softmax over the cosine distance over embedding feature.</p>
+<p>We wish to map from a small support set of $k$ examples of image-label pairs $S=_{i=1}^k$ to a classifier $c_S$ which,  given a test example $\hat{x}$ , defines the probability distribution over outputs $\hat{y}$ . Our model computes $\hat{y}$ as follows:<br>$$<br>\displaystyle </p>
+<p>\hat{y} = \sum_{i=1}^k \alpha(\hat{x},x_i)y_i<br>$$<br>where $(x_i,y_i)$ are samples in the support set $S$ , and $\alpha$ is an attention mechanism, e.g. softmax over the cosine distance over embedding feature.</p>
 <p><strong>Full Context Embedding</strong>: The above classification strategy is fully conditioned on the whole support set $S$ through $P(\cdot \vert \hat{x},S)$. Attention mechanism is applied in the embedding space $X$ . In additon to mapping one example $x_i$ into the embedding space independently of other examples in the support set, we propose to embed $x_i$ conditioned on support set $S$, i.e.  from $g(x_i)$ to $g(x_i, S)$ . The function $g(x_i,S)$ can modify how to embed $x_i$ .  We use bi-LSTM to encode $x_i$ in the context of the support $S$ .</p>
-<p><strong>Training</strong>: </p>
-<script type="math/tex; mode=display">
-\displaystyle
-\theta = \arg {\max}_{\theta} E_{L \sim T} [ E_{S \sim L, B \sim L} [{\sum}_{(x,y) \in B} \log P_{\theta}(y \vert x, S)] ]</script><p>Define task $T$ as distribution over possible label set $L$ . A lable set $L$ is sampled from task $T$. The use $L$ to sample a support set $S$ and the test set $B$ . For instance, given $L=\{\text{cats,dogs}\}$ , $S$ and $B$ are labelled examples of cats and dogs. </p>
+<p><strong>Training</strong>:<br>$$<br>\displaystyle<br>\theta = \arg {\max}<em>{\theta} E</em>{L \sim T} [ E_{S \sim L, B \sim L} [{\sum}<em>{(x,y) \in B} \log P</em>{\theta}(y \vert x, S)] ]<br>$$<br>Define task $T$ as distribution over possible label set $L$ . A lable set $L$ is sampled from task $T$. The use $L$ to sample a support set $S$ and the test set $B$ . For instance, given $L={\text{cats,dogs}}$ , $S$ and $B$ are labelled examples of cats and dogs. </p>
 <p>The matching network is trained over $(S,B)$ to minimize the error predicting the labels in the test set $B$ conditioned on the support set $S$. </p>
 <h4 id="Experiment-Setup"><a href="#Experiment-Setup" class="headerlink" title="Experiment Setup"></a>Experiment Setup</h4><p><strong>N-way k-shot</strong>: a set of $k$ labelled examples from each of $N$ classes that have not previously trained upon.</p>
 <p><strong>Omniglot</strong>: 1623 charactors from 50 different alphabets, 20 examples from different person / character .</p>

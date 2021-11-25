@@ -435,36 +435,25 @@ Adam Santoro, Sergey Bartunov, Matthew Botvinick, Daan Wierstra,">
             <div id="articleContent">
                 <h3 id="One-shot-Learning-with-Memory-Augmented-Neural-Networks"><a href="#One-shot-Learning-with-Memory-Augmented-Neural-Networks" class="headerlink" title="One-shot Learning with Memory-Augmented Neural Networks"></a>One-shot Learning with Memory-Augmented Neural Networks</h3><blockquote>
 <p>Adam Santoro, Sergey Bartunov, Matthew Botvinick, Daan Wierstra, Timothy Lillicrap</p>
-<p><a href="https://arxiv.org/abs/1605.06065" target="_blank" rel="noopener">https://arxiv.org/abs/1605.06065</a></p>
-<p>Code: <a href="https://github.com/philippe554/MANN" target="_blank" rel="noopener">https://github.com/philippe554/MANN</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1605.06065">https://arxiv.org/abs/1605.06065</a></p>
+<p>Code: <a target="_blank" rel="noopener" href="https://github.com/philippe554/MANN">https://github.com/philippe554/MANN</a></p>
 </blockquote>
 <p>“<em>Omniglog images $x_t$ are presented with time-offset labels $y_{t-1}$ to prevent the network from simply mapping the class labels to the output. Frjom episode to episode, the classes to be presented in the episode, their associated labels, and the specific samples are all shuffled.</em>“</p>
 <p><img src="https://i.loli.net/2019/06/14/5d02fe0c529ae80618.jpg" alt="Framework &amp; Strategory"></p>
 <p>The controller employed in our model are either LSTMs or feed-forward networks. The controller interacts with an external memory module using read and write heads, which act to retrieve representations from memory or place them into memory, respectively. </p>
 <h4 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h4><p>Given input image $x_t$ , the controller produces a key $k_t$, which is then either store into the external memory $M_t$ or used to retrieve a particular memory $M_t(i)$ from a row.</p>
 <p><strong>Memory Retrieving</strong>:  $\displaystyle \mathbf{r_t} \leftarrow \sum_t{w_t^r(i)\mathbf{M_t(i)}}$   </p>
-<p>where $\mathbf{w_t^r}$ is the read-weight vector with elements computed according to a softmax:</p>
-<script type="math/tex; mode=display">
-w_t^r(i) \leftarrow \frac{\exp{(K(\mathbf{k_t} , \mathbf{M_t(i)}))}}{\sum_j{\exp{(K(\mathbf{k_t} , \mathbf{M_t(j)}))}}}</script><p>where  $K(\mathbf{k}_t , \mathbf{M}_t(i)) = \frac{\mathbf{k}_t \cdot \mathbf{M}_t(i)}{\Vert \mathbf{k}_t \Vert\Vert \mathbf{M}_t(i) \Vert}$  denotes cosine distance.</p>
+<p>where $\mathbf{w_t^r}$ is the read-weight vector with elements computed according to a softmax:<br>$$<br>w_t^r(i) \leftarrow \frac{\exp{(K(\mathbf{k_t} , \mathbf{M_t(i)}))}}{\sum_j{\exp{(K(\mathbf{k_t} , \mathbf{M_t(j)}))}}}<br>$$</p>
+<p>where  $K(\mathbf{k}_t , \mathbf{M}_t(i)) = \frac{\mathbf{k}_t \cdot \mathbf{M}_t(i)}{\Vert \mathbf{k}_t \Vert\Vert \mathbf{M}_t(i) \Vert}$  denotes cosine distance.</p>
 <p>The retrieved memory is used by the controller as the input to a classifier, such as a softmax output layer, and as an additional input for the next controller state.</p>
 <p><strong>LRUA (Least Recently Used Access)</strong>: a pure content-based memory writer that writes memories to either the least used memory slot or the most recently used memory slot. New information is written into rarely-used locations, preserving recently encoded information, or it is written into the last used location, which can function as an update of the memory with newer, possibly more relevant information.</p>
-<p>We keep an usage weight $\mathbf{w_t^u}$ which is updated at each time-step by decaying the previous usage weight (via decay parameter $\gamma$ ) and adding the current read &amp; write weight</p>
-<script type="math/tex; mode=display">
-\mathbf{w_t^u = \gamma w_{t-1}^u + w_t^r + w_t^w}</script><p>The least-used weight $\mathbf{w_t^{lu}}$ can be computed using $\mathbf{w_t^u}$ </p>
-<script type="math/tex; mode=display">
-w_t^{lu}(i) = 
-\begin{cases}
-0 \quad \text{if } w_t^u(i) \gt m(\mathbf{w_t^u,n}) \\
-1 \quad \text{if } w_t^u(i) \leq m(\mathbf{w_t^u,n})
-\end{cases}</script><p>where $m(\mathbf{w_t^u},n)$ denotes the $n^{th}$ smallest element of vector $\mathbf{w_t^u}$ , $n$ is set to equal the number of reads to memory. </p>
-<p><strong>Memory Write</strong>:  we obtain the write weights</p>
-<script type="math/tex; mode=display">
-\mathbf{w_t^w} \leftarrow \sigma(\alpha) \mathbf{w_{t-1}^r} + (1-\sigma(\alpha))\mathbf{w_{t-1}^{lu}}</script><p>Here $\sigma(\cdot)$ is softmax function, $\alpha$ is a learnable gate parameter to interpolate between the weights.</p>
-<p>Before memory writing, the least used memory slot  is set to zero. Then write the memory</p>
-<script type="math/tex; mode=display">
-\mathbf{M}_t(i) \leftarrow \mathbf{M}_{t-1}(i) + w_t^w(i)\mathbf{k}_t, \forall i</script><p>Thus, memories can be written into the zeroed memory slot or the previously used slot. If it is the later case, the least used memories simply get erased.</p>
-<h4 id="Experiment-Setup"><a href="#Experiment-Setup" class="headerlink" title="Experiment Setup"></a>Experiment Setup</h4><div class="table-container">
-<table>
+<p>We keep an usage weight $\mathbf{w_t^u}$ which is updated at each time-step by decaying the previous usage weight (via decay parameter $\gamma$ ) and adding the current read &amp; write weight<br>$$<br>\mathbf{w_t^u = \gamma w_{t-1}^u + w_t^r + w_t^w}<br>$$<br>The least-used weight $\mathbf{w_t^{lu}}$ can be computed using $\mathbf{w_t^u}$<br>$$<br>w_t^{lu}(i) =<br>\begin{cases}<br>0 \quad \text{if } w_t^u(i) \gt m(\mathbf{w_t^u,n}) \<br>1 \quad \text{if } w_t^u(i) \leq m(\mathbf{w_t^u,n})<br>\end{cases}<br>$$</p>
+<p>where $m(\mathbf{w_t^u},n)$ denotes the $n^{th}$ smallest element of vector $\mathbf{w_t^u}$ , $n$ is set to equal the number of reads to memory. </p>
+<p><strong>Memory Write</strong>:  we obtain the write weights<br>$$<br>\mathbf{w_t^w} \leftarrow \sigma(\alpha) \mathbf{w_{t-1}^r} + (1-\sigma(\alpha))\mathbf{w_{t-1}^{lu}}<br>$$</p>
+<p>Here $\sigma(\cdot)$ is softmax function, $\alpha$ is a learnable gate parameter to interpolate between the weights.</p>
+<p>Before memory writing, the least used memory slot  is set to zero. Then write the memory<br>$$<br>\mathbf{M}<em>t(i) \leftarrow \mathbf{M}</em>{t-1}(i) + w_t^w(i)\mathbf{k}_t, \forall i<br>$$</p>
+<p>Thus, memories can be written into the zeroed memory slot or the previously used slot. If it is the later case, the least used memories simply get erased.</p>
+<h4 id="Experiment-Setup"><a href="#Experiment-Setup" class="headerlink" title="Experiment Setup"></a>Experiment Setup</h4><table>
 <thead>
 <tr>
 <th>Dataset</th>
@@ -472,17 +461,13 @@ w_t^{lu}(i) =
 <th>Others</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>Omniglot</td>
 <td>Randomly translating and rotating</td>
 <td>create new classes through ${90}^{\circ}, {180}^{\circ}, {270}^{\circ}$ rotations</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>A good strategy to employ in this classification task is to wipe the external memory from episode to episode. Since each episode contians examples of different classes with unique labels, any information persisting in memory across episodes inevitably acts as interference for the episode at hand. In order to test the memory interference, we performed the classification task without wiping the memory across episodes. </p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -490,14 +475,11 @@ w_t^{lu}(i) =
 <th><img src="https://i.loli.net/2019/06/14/5d0376c47e1ec11205.png" alt="Performance of LSTM model"></th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td><img src="https://i.loli.net/2019/06/14/5d0376c482cdd11049.png" alt="Performance of MANN model"></td>
 <td><img src="https://i.loli.net/2019/06/14/5d0376c48078423239.png" alt="Performance of MANN model without memory wiping"></td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>Persisting memory across episodes makes the network less robust in its ability to achieve high accuracy. In our experiment, learning progressed much slower than that in the memory wiped case, and the model did not produce the characteristic fast spike in accuracy as seen in the memory-wiped condition. But interestingly, the network was able to perform comparably under certain setups.</p>
 
             </div>

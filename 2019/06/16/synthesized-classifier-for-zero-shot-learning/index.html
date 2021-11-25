@@ -432,7 +432,7 @@ https://arxiv.org/">
             <div id="articleContent">
                 <h3 id="Synthesized-Classifiers-for-Zero-Shot-Learning"><a href="#Synthesized-Classifiers-for-Zero-Shot-Learning" class="headerlink" title="Synthesized Classifiers for Zero-Shot Learning"></a>Synthesized Classifiers for Zero-Shot Learning</h3><blockquote>
 <p>Soravit Changpinyo, Wei-Lun Chao, Boqing Gong, Fei Sha</p>
-<p><a href="https://arxiv.org/abs/1603.00550" target="_blank" rel="noopener">https://arxiv.org/abs/1603.00550</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1603.00550">https://arxiv.org/abs/1603.00550</a></p>
 </blockquote>
 <p>“<em>We introduce a set of phantom object classes which do not correspond to and are not optimized to recognize any real classes directly. Any real class is a convex combinations of the coordinates of those plantom classes. When we need to construct a classifier for an unseen class, we will compute the convex combination coefficients from this class’s semantic space coordinates and use them to form the corresponding classifier.</em>“</p>
 <p><strong>Two key interwoven challenges</strong>: </p>
@@ -440,7 +440,7 @@ https://arxiv.org/">
 <li>How to relate unsean classes to seen ones</li>
 <li>How to attain optimal discriminative performance on the unseen classes even though we do not have their labeled data</li>
 </ul>
-<p><img src="https://i.loli.net/2019/06/13/5d01f7f8da84a15077.jpg" alt></p>
+<p><img src="https://i.loli.net/2019/06/13/5d01f7f8da84a15077.jpg"></p>
 <p>Tackle the problem from the perspective of manifold learning — align the semantic space and the model space. </p>
 <blockquote>
 <p>Each class $c$ has a coordinate  $a_c$ in the semantic embedding space. Two types of such spaces are explored: attributes &amp; class name embedding via word vectors. In the paper, we use attributes to illustrate the idea and in the experiments we test the approach on both types.</p>
@@ -450,26 +450,12 @@ https://arxiv.org/">
 <p><strong>Model Space</strong>: classifier for recognizing visual images of those classes that concerns itself largely for recognizing low level features.</p>
 <p>The parameters for each object model are nothing but coordinates in the model space.</p>
 <h4 id="Methodology"><a href="#Methodology" class="headerlink" title="Methodology"></a>Methodology</h4><p><strong>Notations</strong>:</p>
-<p>$D=\{(x_n \in R^D, y_n)\}_n^N$ — Training images  from seen classes $S=\{1,2,…,S \}$.</p>
-<p>$U=\{S+1,S+2,…,S+U\}$ —  unseen classes. </p>
-<p>A classifier assigns $\hat{y}$ to a data point $x$ is defined by $w_c \in R^D$:  </p>
-<script type="math/tex; mode=display">
-\hat{y} = \arg \max\limits_c  w_c^Tx</script><p>Given $R$ virtual or plantom classes, the real classes and the plantom classes form a bipartite graph, the weights defined as</p>
-<script type="math/tex; mode=display">
-s_{cr} = \frac{\exp\{-d(a_c, b_r)\}}{\sum_{r=1}^R \exp \{-d(a_c,b_r)\}}</script><p>$s_{cr}$ can be interpreted as the conditional probability of observing class $r$ in the neighborhood of class $c$.  </p>
-<p><strong>Learning Semantic Embedding</strong>  $b_r$:  </p>
-<script type="math/tex; mode=display">
-\displaystyle 
-b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in \{1,2,...,R\}</script><p><strong>Learning Virtual Classifier</strong>  $v_r$:  </p>
-<script type="math/tex; mode=display">
-\displaystyle  
-\min_{v_1,...,v_R} \sum_{c=1}^S \sum_{n=1}^N l(x_n,\parallel_{y_n,c};w_c) + \frac{\lambda}{2}\sum_{c=1}^S{\Vert w_c \Vert}_2^2</script><p>s.t.  $w_c = \sum_{r=1}^R s_{cr}v_r, \forall c \in \Tau = \{1,2,…,S\}$.  </p>
-<p>We perform alternating optimization for minimizing the following objective function:  </p>
-<script type="math/tex; mode=display">
-\displaystyle  
-\min_{ \{v_r\}_{r=1}^R,\{\beta_{rc}\}_{r,c=1}^{R,S}} \sum_{c=1}^S\sum_{n=1}^N l(x_n,\parallel_{y_n,c};w_c) + \frac{\lambda}{2}\sum_{c=1}^S{\Vert w_c\Vert}_2^2 + \eta\sum_{r,c=1}^{R,S} \vert \beta_{rc} \vert + \frac{\lambda}{2} \sum_{r=1}^R ({\Vert b_r \Vert}_2^2 - h^2)^2</script><p>s.t. $w_c = \sum_{r=1}^R s_{cr}v_r, \forall c \in \Tau = \{1,2,…,S\}$.  </p>
+<p>$D={(x_n \in R^D, y_n)}_n^N$ — Training images  from seen classes $S={1,2,…,S }$.</p>
+<p>$U={S+1,S+2,…,S+U}$ —  unseen classes. </p>
+<p>A classifier assigns $\hat{y}$ to a data point $x$ is defined by $w_c \in R^D$:<br>$$<br>\hat{y} = \arg \max\limits_c  w_c^Tx<br>$$<br>Given $R$ virtual or plantom classes, the real classes and the plantom classes form a bipartite graph, the weights defined as<br>$$<br>s_{cr} = \frac{\exp{-d(a_c, b_r)}}{\sum_{r=1}^R \exp {-d(a_c,b_r)}}<br>$$<br>$s_{cr}$ can be interpreted as the conditional probability of observing class $r$ in the neighborhood of class $c$.  </p>
+<p><strong>Learning Semantic Embedding</strong>  $b_r$:<br>$$<br>\displaystyle<br>b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in {1,2,…,R}<br>$$<br><strong>Learning Virtual Classifier</strong>  $v_r$:<br>$$<br>\displaystyle<br>\min_{v_1,…,v_R} \sum_{c=1}^S \sum_{n=1}^N l(x_n,\parallel_{y_n,c};w_c) + \frac{\lambda}{2}\sum_{c=1}^S{\Vert w_c \Vert}<em>2^2<br>$$<br>s.t.  $w_c = \sum</em>{r=1}^R s_{cr}v_r, \forall c \in \Tau = {1,2,…,S}$.  </p>
+<p>We perform alternating optimization for minimizing the following objective function:<br>$$<br>\displaystyle<br>\min_{ {v_r}<em>{r=1}^R,{\beta</em>{rc}}<em>{r,c=1}^{R,S}} \sum</em>{c=1}^S\sum_{n=1}^N l(x_n,\parallel_{y_n,c};w_c) + \frac{\lambda}{2}\sum_{c=1}^S{\Vert w_c\Vert}<em>2^2 + \eta\sum</em>{r,c=1}^{R,S} \vert \beta_{rc} \vert + \frac{\lambda}{2} \sum_{r=1}^R ({\Vert b_r \Vert}<em>2^2 - h^2)^2<br>$$<br>s.t. $w_c = \sum</em>{r=1}^R s_{cr}v_r, \forall c \in \Tau = {1,2,…,S}$.  </p>
 <h4 id="Experiment-Setup"><a href="#Experiment-Setup" class="headerlink" title="Experiment Setup"></a>Experiment Setup</h4><p><strong>Semantic Space</strong>: </p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -478,20 +464,19 @@ b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in \{1,2,...,R\}</script><p><s
 <th>Cls Name</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>AwA</td>
 <td>85-d binary or continuous attributes</td>
-<td>100-d word vector derived from class name<br>1k-d word vectors extracted by Fu et al.</td>
+<td>100-d word vector derived from class name<br />1k-d word vectors extracted by Fu et al.</td>
 </tr>
 <tr>
 <td>CUB</td>
-<td>312-d continuous attributes<br>&amp; thresh to obtain binary attributes</td>
+<td>312-d continuous attributes<br />&amp; thresh to obtain binary attributes</td>
 <td>NA</td>
 </tr>
 <tr>
 <td>SUN</td>
-<td>102-d continuous attributes<br>&amp; thresh to obtain binary attributes</td>
+<td>102-d continuous attributes<br />&amp; thresh to obtain binary attributes</td>
 <td>NA</td>
 </tr>
 <tr>
@@ -499,13 +484,10 @@ b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in \{1,2,...,R\}</script><p><s
 <td>Not clear</td>
 <td>500-d word vector from Skip-gram model on Wikipedia</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p><strong>Model Space</strong>: </p>
 <p>Whenever possible, use shallow visual features such as color histogram, SIFT, PHOG, Fisher</p>
 <p>For deep learning feature:</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -513,8 +495,7 @@ b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in \{1,2,...,R\}</script><p><s
 <th>Feat</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>AwA</td>
 <td>AlexNet &amp; GoogleNet</td>
 </tr>
@@ -530,9 +511,7 @@ b_r = \sum_{c=1}^S \beta_{rc}\alpha_c, \forall r \in \{1,2,...,R\}</script><p><s
 <td>ImageNet</td>
 <td>GoogleNet</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>For AlexNet, use the 4096-d activations of the penultimate layer (fc7) as feature.</p>
 <p>For GoogleNet, use the 1024-d activations of the pooling units.</p>
 

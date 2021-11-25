@@ -428,7 +428,7 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="DropBlock-面向卷积网络的新正则化方法"><a href="#DropBlock-面向卷积网络的新正则化方法" class="headerlink" title="DropBlock: 面向卷积网络的新正则化方法"></a>DropBlock: 面向卷积网络的新正则化方法</h2><p>近日arXiv上发表一篇新的关于卷积网络训练的文章<strong>DropBlock: A regularization method for convolutional networks</strong>，文章来自鼎鼎大名的<a href="https://ai.google/research/teams/brain" target="_blank" rel="noopener">Google Brain</a>，目前已经被<a href="https://nips.cc/" target="_blank" rel="noopener">NIPS 2018</a>收录为Poster文章。</p>
+                <h2 id="DropBlock-面向卷积网络的新正则化方法"><a href="#DropBlock-面向卷积网络的新正则化方法" class="headerlink" title="DropBlock: 面向卷积网络的新正则化方法"></a>DropBlock: 面向卷积网络的新正则化方法</h2><p>近日arXiv上发表一篇新的关于卷积网络训练的文章<strong>DropBlock: A regularization method for convolutional networks</strong>，文章来自鼎鼎大名的<a target="_blank" rel="noopener" href="https://ai.google/research/teams/brain">Google Brain</a>，目前已经被<a target="_blank" rel="noopener" href="https://nips.cc/">NIPS 2018</a>收录为Poster文章。</p>
 <p><img src="https://i.postimg.cc/BvGrjf2t/1540967782364.png" alt="1540967782364"></p>
 <h3 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h3><blockquote>
 <p>机器学习的主要主要目的是用有限的标注数据来训练模型，使得模型在没有见过的数据上也能表现良好，即模型泛化能力强。例如：对于一个识别猫的模型，我们给它一张猫的图片并告知图中是猫，那么模型下次在见到猫的图片时也能判断出图中是猫，即使这个猫和它之前见过的不是同一只。</p>
@@ -438,24 +438,19 @@
 <p><em>关于模型过拟合的问题在《模式识别和机器学习》中有比较详细的介绍。</em></p>
 <p>今天的内容就与缓解模型过拟合、提高泛化能力的有关。</p>
 <h3 id="二、相关工作"><a href="#二、相关工作" class="headerlink" title="二、相关工作"></a>二、相关工作</h3><p>深度神经网络含有大量需要训练的参数，从数学上理解它是一个极其复杂的函数，一般为了使用有限的训练数据对网络进行训练，我们会引入大量的噪声和正则约束，比如weight decay 和 dropout。其中dropout在AlexNet中被提出来用于图像分类，虽然最初dropout是和卷积层一起使用的，近年来却很少和卷积层一起出现了，多被用于全连接层激活函数值的随机舍弃。</p>
-<h4 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h4><p>Dropout的原理很好理解：让神经元以一定概率停止工作，实现上则是将神经元的激活结果按  $p$  设成 $0$, 公式如下：</p>
-<script type="math/tex; mode=display">
-r_{j}^{l} \thicksim Bernoulli(p)  \\
-\vec{\tilde{y}} = \vec{r}^l * \vec{y}^l</script><p>其中 $ \vec{y}^l$ 为第$l$层的激活值， $\vec{r}^l$ 是该层使用的dropout mask值，$\vec{y}^l$和$\vec{r}^l$有相同的分辨率或大小。这种随机舍弃的策略可以提高模型的泛化能力，在后来的模型设计中被广泛使用。一种说法认为Dropout是一种模型平均策略，模型的每一个训练iter中因为随机舍弃了部分激活信息使得模型发生变化，训练使用dropout的模型实际上是在训练很多网络结构相同、权值共享的模型。</p>
+<h4 id="Dropout"><a href="#Dropout" class="headerlink" title="Dropout"></a>Dropout</h4><p>Dropout的原理很好理解：让神经元以一定概率停止工作，实现上则是将神经元的激活结果按  $p$  设成 $0$, 公式如下：<br>$$<br>r_{j}^{l} \thicksim Bernoulli(p)  \<br>\vec{\tilde{y}} = \vec{r}^l * \vec{y}^l<br>$$<br>其中 $ \vec{y}^l$ 为第$l$层的激活值， $\vec{r}^l$ 是该层使用的dropout mask值，$\vec{y}^l$和$\vec{r}^l$有相同的分辨率或大小。这种随机舍弃的策略可以提高模型的泛化能力，在后来的模型设计中被广泛使用。一种说法认为Dropout是一种模型平均策略，模型的每一个训练iter中因为随机舍弃了部分激活信息使得模型发生变化，训练使用dropout的模型实际上是在训练很多网络结构相同、权值共享的模型。</p>
 <blockquote>
 <p>Dropout provides an inexpensive and simple means of both training a large assemble of models that share parameters and approximately averaging together these models’ predictions.</p>
 <p>Dropout is generally viewed as an indiscriminately applicable tool that reliable yields a modest improvement in performance when applied to almost any model.</p>
 </blockquote>
-<h4 id="Maxout"><a href="#Maxout" class="headerlink" title="Maxout"></a>Maxout</h4><p>13年蒙特利尔大学在ICML上发表论文 <a href="https://arxiv.org/pdf/1302.4389.pdf" target="_blank" rel="noopener">《Maxout Networks》</a> 认为dropout是在用训练集的不同子集来训练不同的子模型（sub-model），所有子模型共享参数。训练过程像是在训练一个包含很多分支的ensemble网络，区别是所有分支权值共享。问题是如何merge这些子模型的预测值来得到最终预测？</p>
-<p>我们先从数学上理解一下：假设网络包含$L$个隐藏层$\mathbf{h}={h_1, h_2, …, h_L}$，网络参数为$\theta$，网络输入$v$对应Label为$y$，假设隐藏层包含$N$个神经元，那么在每个隐藏层后应用dropout的结果是网络衍生成$\mathbf{M}=2^N$个子模型，不同的dropout mask $\mu$对应不同的子模型。$\mu$的每个元素在$\{0,1\}$中取值，0表示舍弃，1表示保留。训练时，由于dropout随机舍弃，可以认为每个iter应用的$\mu$不同，故而子模型不同，子模型通过$log(y|v, \theta, u)$进行优化。</p>
+<h4 id="Maxout"><a href="#Maxout" class="headerlink" title="Maxout"></a>Maxout</h4><p>13年蒙特利尔大学在ICML上发表论文 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1302.4389.pdf">《Maxout Networks》</a> 认为dropout是在用训练集的不同子集来训练不同的子模型（sub-model），所有子模型共享参数。训练过程像是在训练一个包含很多分支的ensemble网络，区别是所有分支权值共享。问题是如何merge这些子模型的预测值来得到最终预测？</p>
+<p>我们先从数学上理解一下：假设网络包含$L$个隐藏层$\mathbf{h}={h_1, h_2, …, h_L}$，网络参数为$\theta$，网络输入$v$对应Label为$y$，假设隐藏层包含$N$个神经元，那么在每个隐藏层后应用dropout的结果是网络衍生成$\mathbf{M}=2^N$个子模型，不同的dropout mask $\mu$对应不同的子模型。$\mu$的每个元素在${0,1}$中取值，0表示舍弃，1表示保留。训练时，由于dropout随机舍弃，可以认为每个iter应用的$\mu$不同，故而子模型不同，子模型通过$log(y|v, \theta, u)$进行优化。</p>
 <p>Dropout作为一种模型平均策略其模型平均的能力是隐含在算法实现里的，当dropout应用到深度神经网络模型的时候，由于训练过程无法穷举所有可能的舍弃情况，最终模型也只能是显式进行模型平均的一个近似估计。</p>
-<p>为减小这种模型平均的估计误差，Maxout引入了maxout单元作为激活函数配合dropout使用:</p>
-<script type="math/tex; mode=display">
-h_i(x)= \displaystyle\max_{j=1...k} z_{ij}</script><p>其中$z_{ij}= x^TW_{…ij}+b_{ij}$，$x \in R^d$， $W \in R^{d \times m \times k}$，$b \in R^{m \times k}$， $W,b$ 是待学习参数。这样对每个输出层$m_i$内部都包含$k$个隐藏层，$m_i$的最终输出是在内部$k$个隐藏层中取max的结果。如果$k=1$则模型简化成我们熟知的MLP了。</p>
-<pre class="line-numbers language-lang-python"><code class="language-lang-python">@add_arg_scope
+<p>为减小这种模型平均的估计误差，Maxout引入了maxout单元作为激活函数配合dropout使用:<br>$$<br>h_i(x)= \displaystyle\max_{j=1…k} z_{ij}<br>$$<br>其中$z_{ij}= x^TW_{…ij}+b_{ij}$，$x \in R^d$， $W \in R^{d \times m \times k}$，$b \in R^{m \times k}$， $W,b$ 是待学习参数。这样对每个输出层$m_i$内部都包含$k$个隐藏层，$m_i$的最终输出是在内部$k$个隐藏层中取max的结果。如果$k=1$则模型简化成我们熟知的MLP了。</p>
+<pre><code class="python">@add_arg_scope
 def maxout(inputs, num_units, axis=-1, scope=None):
-  """Adds a maxout op from https://arxiv.org/abs/1302.4389
-  "Maxout Networks" Ian J. Goodfellow, David Warde-Farley, Mehdi Mirza, Aaron
+  &quot;&quot;&quot;Adds a maxout op from https://arxiv.org/abs/1302.4389
+  &quot;Maxout Networks&quot; Ian J. Goodfellow, David Warde-Farley, Mehdi Mirza, Aaron
   Courville,
    Yoshua Bengio
   Usually the operation is performed in the filter/channel dimension. This can
@@ -473,14 +468,14 @@ def maxout(inputs, num_units, axis=-1, scope=None):
     A `Tensor` representing the results of the pooling operation.
   Raises:
     ValueError: if num_units is not multiple of number of features.
-  """
-  with variable_scope.variable_scope(scope, 'MaxOut', [inputs]):
+  &quot;&quot;&quot;
+  with variable_scope.variable_scope(scope, &#39;MaxOut&#39;, [inputs]):
     inputs = ops.convert_to_tensor(inputs)
     shape = inputs.get_shape().as_list()
     num_channels = shape[axis]
     if num_channels % num_units:
-      raise ValueError('number of features({}) is not '
-                       'a multiple of num_units({})'.format(
+      raise ValueError(&#39;number of features(&#123;&#125;) is not &#39;
+                       &#39;a multiple of num_units(&#123;&#125;)&#39;.format(
                            num_channels, num_units))
     shape[axis] = -1
     shape += [num_channels // num_units]
@@ -492,9 +487,9 @@ def maxout(inputs, num_units, axis=-1, scope=None):
     outputs = math_ops.reduce_max(
         array_ops.reshape(inputs, shape), -1, keepdims=False)
     return outputs
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</code></pre>
 <p>以上是<code>tf.contrib.layers.maxout</code>的实现。Maxout单元是一个分段函数，理论上任何凸函数都能通过分段函数近似表达。</p>
-<h4 id="SpatialDropout"><a href="#SpatialDropout" class="headerlink" title="SpatialDropout"></a>SpatialDropout</h4><p>Dropout通过随机舍弃激活值的方式引入噪声，从而防止模型过拟合提高泛化能力。Yann LeCun组在论文 <a href="https://arxiv.org/pdf/1411.4280" target="_blank" rel="noopener">《Efficient Object Localization Using Convolutional Network》</a>实验中发现在非$1 \times 1$卷积层应用dropout不仅使得模型训练时间大大变长，更重要的是并不能保证防止过拟合。他们认为原因主要在于卷积操作具有极强的空间关联性，因此特征图的激活值也是紧密相关的，这种情况下随机dropout一些特征单元并不能解决问题。</p>
+<h4 id="SpatialDropout"><a href="#SpatialDropout" class="headerlink" title="SpatialDropout"></a>SpatialDropout</h4><p>Dropout通过随机舍弃激活值的方式引入噪声，从而防止模型过拟合提高泛化能力。Yann LeCun组在论文 <a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1411.4280">《Efficient Object Localization Using Convolutional Network》</a>实验中发现在非$1 \times 1$卷积层应用dropout不仅使得模型训练时间大大变长，更重要的是并不能保证防止过拟合。他们认为原因主要在于卷积操作具有极强的空间关联性，因此特征图的激活值也是紧密相关的，这种情况下随机dropout一些特征单元并不能解决问题。</p>
 <p><img src="https://www.groundai.com/media/arxiv_projects/33221/figures/standard_dropout.svg" alt="Figure 2: Standard Dropout after a 1D convolution layer"></p>
 <p>如上图中，$F_1$、$F_2$为上一层激活值经dropout后的输出，$W_{1Pos2}, W_{1Pos1}$ 和 $W_{2Pos2}, W_{2Pos1}$分别是特征单元$f_{1a},f_{1b}$和$f_{2a},f_{2b}$上的卷积核。误差回传时，$W_2$的中间位置同时接收到从$f_{2a},f_{2b}$贡献的量，其中因为$f_{2b}$被dropout置零，$f_{2b}$的贡献也将忽略不计。本质上，这个过程可以看作是对$lr$学习率的调整，真正的学习率近似等于 $lr*p$， $1-p$ 是dropout的舍弃概率，但独立性（independence）并没有得到改善。</p>
 <p>基于此，作者在dropout的基础上提出SpatialDropout，思路很好理解：就是在channel层面上进行随机舍弃，对一个$C \times M \times N$的特征图，如果第$c_i$个特征通道被选择舍弃，那么该通道的所有$M \times N$ 个特征单元都被置零，就像下面这样：</p>
@@ -508,9 +503,7 @@ def maxout(inputs, num_units, axis=-1, scope=None):
 <p><img src="https://i.postimg.cc/43MRX2Xx/1541236820742.png" alt="在绿色区域生成掩模，防止拓展后掩模超出范围"></p>
 <p>实际上我觉得这种限制并不必要，如果不加以限制无非是需要使用Clip删除超出范围的掩模。</p>
 <p>DropBlock和Dropout、SpatialDropout的关系也显而易见。当$\text{block_size}=1$时DropBlock就变成了普通的Dropout；当$\text{block_size}$覆盖整个特征图的时候，DropBlock就模拟了SpatialDropout。</p>
-<p>在DropBlock算法中概率$\gamma$是一个比较特殊的变量，论文中将它设置成一个自适应的变量：</p>
-<script type="math/tex; mode=display">
-\gamma = \frac{1-\text{keep-prob}}{\text{block_size}^2}\frac{\text{feat_size}^2}{(\text{feat_size-block_size+1})^2}</script><p>其中$1-\text{keep_prob}$意义和传统Dropout中的超参相同，表示每个特征单元被舍弃的概率，在使用DropBlock时我们一样设置这个超参，然后用上式计算进行掩模采样的概率$\gamma$. 如此设置$\gamma$的意义可以这么理解：</p>
+<p>在DropBlock算法中概率$\gamma$是一个比较特殊的变量，论文中将它设置成一个自适应的变量：<br>$$<br>\gamma = \frac{1-\text{keep-prob}}{\text{block_size}^2}\frac{\text{feat_size}^2}{(\text{feat_size-block_size+1})^2}<br>$$<br>其中$1-\text{keep_prob}$意义和传统Dropout中的超参相同，表示每个特征单元被舍弃的概率，在使用DropBlock时我们一样设置这个超参，然后用上式计算进行掩模采样的概率$\gamma$. 如此设置$\gamma$的意义可以这么理解：</p>
 <ul>
 <li>既然只能在$(\text{feat_size-block_size+1})^2$的区域内生成初始掩模，那么每个特征单元被置零的概率等于$ p_i = \gamma * \frac{(\text{feat_size-block_size+1})^2}{\text{feat_size}^2}$</li>
 <li>DropBlock将一个掩模位置拓展成宽高为$\text{block_size}$的正方形区域，拓展后每个特征单元被置零的概率近似等于 $ p_j = p_i * \text{block_size}^2$</li>
@@ -534,16 +527,16 @@ def maxout(inputs, num_units, axis=-1, scope=None):
 <p>曲线说明：1）DropBlock在大多数keep_prob下都能提高模型性能，而且对keep_prob的变化更加鲁棒， 2）使用自适应$\gamma$ 的DropBlock在不同的keep_prob下对模型性能的影响一致。</p>
 <h4 id="4-2-物体检测"><a href="#4-2-物体检测" class="headerlink" title="4.2 物体检测"></a>4.2 物体检测</h4><p>作者将DropBlock用于检测任务中，使用的主体网络时RetinaNet，从任意初始状态开始训练（即train from stratch），看在是否使用DropBlock以及使用多大的 block_size 对检测器训练的影响。图片先缩放到 512-768 左右大小，然后crop或pad 到长边为640大小。网络的每个卷积层后都使用了batch normalization，包括检测器的分类/回归分支。Batch size 大小设为64， 训练了150个epoch。初始lr设置为0.08，然后依次在120和140 eopch缩小10倍。下表是在COCO train2017 上训练，在COCO val2017上evaluation的结果：</p>
 <p><img src="https://i.postimg.cc/mkyn1mWM/1541607155056.png" alt="不同设置下检测器性能比较"></p>
-<p>keep_prob使用了分类任务中发现表现最好的 0.9，同样是从随机初始化开始训练的情况下，使用DropBlock能得到更好的检测器。注意到这里block_size变化对检测器的影响很微妙，但论文里没有详细分析，值得研究。论文从表中的数据得出使用正则约束是从零开始训练检测器很重要的一环，但这个结论有些牵强，毕竟训练的时间差别比较大 —- 从Imagenet finetune时只训练了28个epoch而已。</p>
+<p>keep_prob使用了分类任务中发现表现最好的 0.9，同样是从随机初始化开始训练的情况下，使用DropBlock能得到更好的检测器。注意到这里block_size变化对检测器的影响很微妙，但论文里没有详细分析，值得研究。论文从表中的数据得出使用正则约束是从零开始训练检测器很重要的一环，但这个结论有些牵强，毕竟训练的时间差别比较大 — 从Imagenet finetune时只训练了28个epoch而已。</p>
 <h4 id="4-3-PASCAL-VOC-分割"><a href="#4-3-PASCAL-VOC-分割" class="headerlink" title="4.3 PASCAL VOC 分割"></a>4.3 PASCAL VOC 分割</h4><p>在分割任务上的实验与检测上的区别不大，使用的时PASCAL VOC12 数据集（10582 train， 1449 test），主体网络使用开源RetinaNet实现。从随机初始状态开始训练500 epoch 的结果与从Imagenet finetune 45 个epoch的结果相去甚远，但比同是从随机状态开始训练的不使用DropBlock的网络要好很多。</p>
 <p><img src="https://i.postimg.cc/y6mtG83d/1541612036335.png" alt="不同设置下分割任务表现"></p>
 <h3 id="五、结论"><a href="#五、结论" class="headerlink" title="五、结论"></a>五、结论</h3><p>DropBlock有比Dropout更好的正则约束能力，使用DropBlock训练的模型性能更好、更鲁棒。 原因是卷积网络的激活输出连续区域具有很强的关联性，这种关联性通过Dropout随机舍弃不易打破，尽管我们能通过Dropout舍弃一些点但信息仍然通过相邻点传递到下一层，即Dropout阻断或屏蔽语义信息的效率不高；而DropBlock刚好弥补了这方面的不足，通过舍弃一个点以及周围特定区域的所有点，DropBlock能有效屏蔽该区域的语义信息，进而迫使网络从别的区域学习特征（原文：learning multiple discriminative regions instead of only focusing on one discriminative region），网络从全图找信息，也正因为此使用DropBlock的模型对keep_prob表现出更好的鲁棒性。最后用下面这张图来证明DropBlock能从全图找信息，学习到spatially distributed representations</p>
 <p><img src="https://i.postimg.cc/MpFFBcNs/1541613243691.png" alt="DropBlock learns spatially distributed representations"></p>
 <p>第2，3，4行分别是在 <strong>分类任务下</strong> 不使用DropBlock，使用 <em>block_size=1</em> 的DropBlock 和使用 <em>block_size=7</em> 的DropBlock时 ResNet-50 <code>conv5_3</code> 的类激活可视化（Class activation maps：CAM）。</p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ol>
-<li><a href="https://www.jianshu.com/p/b0a328726681" target="_blank" rel="noopener">maxout network的TensorFlow实现</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/31685211" target="_blank" rel="noopener">《Maxout Networks》论文阅读</a></li>
-<li><a href="https://www.groundai.com/project/efficient-object-localization-using-convolutional-networks/" target="_blank" rel="noopener">Efficient Object Localization Using Convolutional Networks</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/b0a328726681">maxout network的TensorFlow实现</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/31685211">《Maxout Networks》论文阅读</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.groundai.com/project/efficient-object-localization-using-convolutional-networks/">Efficient Object Localization Using Convolutional Networks</a></li>
 </ol>
 
             </div>
@@ -664,15 +657,13 @@ def maxout(inputs, num_units, axis=-1, scope=None):
 
 
 
-
 配置文件
 说明信息
 
 
 
-
 /etc/gitconfig
-system级别的配置信
+system级别的配置信息，
                         
                     </div>
                     <div class="publish-info">

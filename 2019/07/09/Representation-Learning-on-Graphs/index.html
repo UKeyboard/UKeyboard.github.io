@@ -432,7 +432,7 @@ https://arxiv.o">
             <div id="articleContent">
                 <h2 id="Representation-Learning-on-Graphs-Methods-and-Applications"><a href="#Representation-Learning-on-Graphs-Methods-and-Applications" class="headerlink" title="Representation Learning on Graphs: Methods and Applications"></a>Representation Learning on Graphs: Methods and Applications</h2><blockquote>
 <p>William L. Hamilton, Rex Ying, Jure Leskovec</p>
-<p><a href="https://arxiv.org/pdf/1709.05584.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1709.05584.pdf</a></p>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1709.05584.pdf">https://arxiv.org/pdf/1709.05584.pdf</a></p>
 <p>Machine learning on graphs is an important and ubiquitous task with applications ranging from drug design to friendship recommendation in social networks. The primary challenge in this domain is ﬁnding a way to represent, or encode, graph structure so that it can be easily exploited by machine learning models. Traditionally, machine learning approaches relied on user-deﬁned heuristics to extract features encoding structural information about a graph (e.g., degree statistics or kernel functions). However, recent years have seen a surge in approaches that automatically learn to encode graph structure into low-dimensional embeddings, using techniques based on deep learning and nonlinear dimensionality reduction. Here we provide a conceptual review of key advancements in this area of representation learning on graphs, including matrix factorization-based methods, random-walk based algorithms, and graph neural networks. We review methods to embed individual nodes as well as approaches to embed entire (sub)graphs. In doing so, we develop a uniﬁed framework to describe these recent approaches, and we highlight a number of important applications and directions for future work.</p>
 </blockquote>
 <p>The central problem in machine learning on graphs is finding a way to incorporate information about graph structure into a ML model. The challenge - from a ML perspective - is that there is no straightforward way to encode this high-dimensional non-Euclidean information about graph structure into a feature vector.</p>
@@ -441,7 +441,6 @@ https://arxiv.o">
 <p><strong>Unsupervised Approaches</strong>: optimize the mapping only making use of information in $\mathbf{A}$ and $\mathbf{X}$ , without knowledge of a particular downstream ML task.</p>
 <p><strong>Supervised Approaches</strong>: optimize the mapping, making use of classification or regression labels (for individual nodes or entire subgraphs).</p>
 <p><strong>Notation</strong>:</p>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -449,8 +448,7 @@ https://arxiv.o">
 <th>Desc</th>
 </tr>
 </thead>
-<tbody>
-<tr>
+<tbody><tr>
 <td>$\mathcal{G}=(\mathcal{V},\mathcal{E})$</td>
 <td>undirected graph</td>
 </tr>
@@ -460,7 +458,7 @@ https://arxiv.o">
 </tr>
 <tr>
 <td>$\mathbf{X}\in\mathcal{R}^{m\times\vert\mathcal{V}\vert}$</td>
-<td>Real-valued matrix of node attributes<br>e.g. representing text or metadata associated with nodes</td>
+<td>Real-valued matrix of node attributes<br />e.g. representing text or metadata associated with nodes</td>
 </tr>
 <tr>
 <td>$\mathbf{z}\in\mathcal{R}^d$</td>
@@ -486,18 +484,14 @@ https://arxiv.o">
 <td>$s_{\mathcal{G}}$</td>
 <td>the user-defined, graph-based similarity measure between nodes, defined over the graph $\mathcal{G}$</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <h3 id="Embedding-Nodes"><a href="#Embedding-Nodes" class="headerlink" title="Embedding Nodes"></a>Embedding Nodes</h3><blockquote>
 <p>Encode nodes as low-dimensional vectors that summarize their graph position and the structure of their local graph neighborhood, where geometric relations in this latent space correspond to interactions in the original graph.</p>
 </blockquote>
 <h4 id="AED-encoder-decoder"><a href="#AED-encoder-decoder" class="headerlink" title="AED: encoder-decoder"></a>AED: encoder-decoder</h4><p><strong>Encoder</strong>: map nodes to vector embeddings </p>
 <p><strong>Decoder</strong>: accept a set of node embeddings and decodes user-specific graph statistics from the embeddings, for example: existence of edges, community the node belongs to. Most of the works use a basic pairwise decoder that maps pairs of node embeddings to a real-valued node similarity measure, which quantifies the similarity of the two nodes in the original graph.</p>
-<p><strong>Objective</strong>: $\text{DEC}(\text{ENC}(v_i),\text{ENC}(v_j)) = \text{DEC}(\mathbf{z}_i,\mathbf{z}_j) \approx s_{\mathcal{G}}(v_i,v_j)$ </p>
-<p>Most approaches defines a user-specified loss function, which measure the discrepancy between the decodeed similarity values $\text{DEC}(\mathbf{z}_i,\mathbf{z}_j)$ and the true values $s_{\mathcal{G}}(v_i,v_j)$ .</p>
-<script type="math/tex; mode=display">
-\mathcal{L} = \sum_{(v_i,v_j)\in\mathcal{D}} \mathcal{l}(\text{DEC}(\mathbf{z}_i,\mathbf{z}_j), s_{\mathcal{G}}(v_i,v_j))</script><p><strong>4 Methodological Components</strong>: </p>
+<p><strong>Objective</strong>: $\text{DEC}(\text{ENC}(v_i),\text{ENC}(v_j)) = \text{DEC}(\mathbf{z}_i,\mathbf{z}<em>j) \approx s</em>{\mathcal{G}}(v_i,v_j)$ </p>
+<p>Most approaches defines a user-specified loss function, which measure the discrepancy between the decodeed similarity values $\text{DEC}(\mathbf{z}<em>i,\mathbf{z}<em>j)$ and the true values $s</em>{\mathcal{G}}(v_i,v_j)$ .<br>$$<br>\mathcal{L} = \sum</em>{(v_i,v_j)\in\mathcal{D}} \mathcal{l}(\text{DEC}(\mathbf{z}_i,\mathbf{z}<em>j), s</em>{\mathcal{G}}(v_i,v_j))<br>$$<br><strong>4 Methodological Components</strong>: </p>
 <ol>
 <li><strong>pairwise similarity function</strong>: $s_{\mathcal{G}}: \mathcal{V} \times \mathcal{V} \rightarrow \mathcal{R}^{+}$ defined over the graph $\mathcal{G}$ , measuring the similarity between nodes</li>
 <li><strong>encoder function</strong> defines how to map nodes in graph into embedding vectors.</li>
@@ -505,8 +499,7 @@ https://arxiv.o">
 <li><strong>loss function</strong> defines how to compare the reconstructions and the true values.</li>
 </ol>
 <p><span style="color:red">Note: we ignore the shallow embedding approaches (i.e. Matrix Factorization &amp; Random walk). Please refer to the original paper for more information.</span></p>
-<h4 id="Neighborhood-autoencoder-methods"><a href="#Neighborhood-autoencoder-methods" class="headerlink" title="Neighborhood autoencoder methods"></a>Neighborhood autoencoder methods</h4><div class="table-container">
-<table>
+<h4 id="Neighborhood-autoencoder-methods"><a href="#Neighborhood-autoencoder-methods" class="headerlink" title="Neighborhood autoencoder methods"></a>Neighborhood autoencoder methods</h4><table>
 <thead>
 <tr>
 <th>Method</th>
@@ -515,22 +508,19 @@ https://arxiv.o">
 <th>loss function</th>
 </tr>
 </thead>
-<tbody>
-<tr>
-<td><a href="https://pdfs.semanticscholar.org/1a37/f07606d60df365d74752857e8ce909f700b3.pdf" target="_blank" rel="noopener">DNGR</a></td>
+<tbody><tr>
+<td><a target="_blank" rel="noopener" href="https://pdfs.semanticscholar.org/1a37/f07606d60df365d74752857e8ce909f700b3.pdf">DNGR</a></td>
 <td>$\mathbf{z}_i = \text{ENC}(v_i)=\text{ENC}(\mathbf{s}_i)$, the pointwise mutual information of 2 nodes co-occurring on random walks , similar to DeepWalk, $\mathbf{S}$ contains pairwise node similarities</td>
 <td>$\text{DEC}(\mathbf{z_i}) \approx \mathbf{s}_i$</td>
 <td>$\mathcal{L}=\sum_{v_i\in\mathcal{V}}{\Vert\text{DEC}(\mathbf{z}_i) - \mathbf{s}_i\Vert}_2^2$</td>
 </tr>
 <tr>
-<td><a href="https://www.kdd.org/kdd2016/papers/files/rfp0191-wangAemb.pdf" target="_blank" rel="noopener">SDNE</a></td>
+<td><a target="_blank" rel="noopener" href="https://www.kdd.org/kdd2016/papers/files/rfp0191-wangAemb.pdf">SDNE</a></td>
 <td>$\mathbf{z}_i = \text{ENC}(v_i)=\text{ENC}(\mathbf{s}_i)$, $\mathbf{s}_i \triangleq \mathbf{A}_i,$ as $v_i$’s adjacency vector, $\mathbf{S}$ contains pairwise node similarities</td>
 <td>$\text{DEC}(\mathbf{z_i}) \approx \mathbf{s}_i$</td>
 <td>$\mathcal{L}=\sum_{v_i\in\mathcal{V}}{\Vert\text{DEC}(\mathbf{z}_i) - \mathbf{s}_i\Vert}_2^2$</td>
 </tr>
-</tbody>
-</table>
-</div>
+</tbody></table>
 <p>Input vector $\mathbf{s}_i$ contains information about $v_i$’s local graph graph neighborhood. The goal is to compress the node’s neighborhood informatin into a low-dimensional vector.</p>
 <h4 id="Neighborhood-aggregation-amp-Conv-Encoders"><a href="#Neighborhood-aggregation-amp-Conv-Encoders" class="headerlink" title="Neighborhood aggregation &amp; Conv-Encoders"></a>Neighborhood aggregation &amp; Conv-Encoders</h4><p>“<em>By designing encoders that rely on a node’s local neighborhood (by aggregating information from its local neighborhood), but not necessarily the entire graph</em>.”  </p>
 <p><img src="https://i.loli.net/2019/07/10/5d25fc817f6cc69866.png" alt="A deep-2 version of information aggregation"></p>
@@ -538,29 +528,14 @@ https://arxiv.o">
 <p>In cases where attribute data is not given, these methods can use simple graph statistics as attributes (e.g., node degrees) , or assign each node a one-hot indicator vector as an attribute. <strong>These methods<br>are often called <em>convolutional</em> because they represent a node as a function of its surrounding neighborhood, in a manner similar to the receptive field of a center-surround convolutional kernel in computer vision.</strong> </p>
 </blockquote>
 <p><img src="https://i.loli.net/2019/07/10/5d260145b0acc42260.png" alt="Neighborhood-aggregation encoder algorithm"></p>
-<p>The trainable parameters is a set of aggregation functions and a set of weight matrices $\{\mathbf{W}^k, \forall k \in [1,K]\}$ . Methods follow this algorithm often differ primarily in how the aggregation and vector combination are performed.</p>
+<p>The trainable parameters is a set of aggregation functions and a set of weight matrices ${\mathbf{W}^k, \forall k \in [1,K]}$ . Methods follow this algorithm often differ primarily in how the aggregation and vector combination are performed.</p>
 <p><img src="https://i.loli.net/2019/07/11/5d26a3c5ca2fc22486.png" alt="Aggregation &amp; Combination"></p>
-<p>The basic approach - average neighbor messages and apply a neurual network.</p>
-<script type="math/tex; mode=display">
-\mathbf{h}_v^0 = \mathbf{x}_v \\
-\mathbf{h}_v^k = \sigma(\mathbf{W}_k\sum_{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v) \vert} + \mathbf{B}_k\mathbf{h}_v^{k-1}), \forall k\in[1,K] \\
-\mathbf{z}_v = \mathbf{h}_v^{K}</script><p>Note: <em>the same set of aggregation functions are shared for all nodes, so is the model parameters. And all learnable parameters can generalize to unseen nodes.</em></p>
-<p><strong>GCN</strong> : a slight variation of the aggregation functions.</p>
-<script type="math/tex; mode=display">
-\mathbf{h}_v^k = \sigma(\mathbf{W}_k\sum_{u\in N(v)\cup v}\frac{\mathbf{h}_u^{k-1}}{\sqrt{\vert N(u) \vert\vert N(v) \vert}}), \forall k\in[1,K]</script><p>GCN uses the same transformation matrix $\mathbf{W}_k$ for self and neighbor nodes, and normalizes embeddings adaptively across neighbors, instead of simple average.</p>
-<p><strong>GraphSAGE</strong>: a general aggregation method rather than (weighted) average, and concatenating self embedding and neighbor enbedding .</p>
-<script type="math/tex; mode=display">
-\mathbf{h}_v^k = \sigma([\mathbf{W}_k \cdot \text{AGG}(\{\mathbf{h}_u^{k-1},\forall u\in N(v)\}),\mathbf{B}_k\mathbf{h}_v^{k-1}]), \forall k\in[1,K]</script><p>we are free to employ proper aggregation method:</p>
-<script type="math/tex; mode=display">
-\begin{align}
-\text{AGG} = \sum_{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v)\vert} & \quad (mean) \\
-\text{AGG} = \gamma(\{\mathbf{Q}\mathbf{h}_u^{k-1}, \forall u \in N(v)\}) & \quad (pool) \\
-\text{AGG} = \text{LSTM}([\mathbf{h}_u^{k-1}, \forall u \in \pi(N(v))]) & \quad (LSTM)
-\end{align}</script><p>GCN &amp; GraphSAGE generally only 2-3 layers deep. To handle models with $\gt20$ layers, use LSTM or RNN as the shared network across layers. </p>
-<p><strong>RNN &amp;&amp; LSTM </strong> :</p>
-<script type="math/tex; mode=display">
-\mathbf{m}_v^k = \sum_{u\in N(v)} M(\mathbf{h}_u^{k-1},\mathbf{h}_v^{k-1},\mathbf{e}_{u,v}) \\
-\mathbf{h}_v^k = U(\mathbf{h}_v^{k-1},\mathbf{m}_v^k)</script><h4 id="Graph-Neural-Networks"><a href="#Graph-Neural-Networks" class="headerlink" title="Graph Neural Networks"></a>Graph Neural Networks</h4><p>Instead of aggregating information from neighbors, the intuition behind GNNs is that graphs can be viewed as specifying scaffolding for a “message passing” algorithm between nodes.</p>
+<p>The basic approach - average neighbor messages and apply a neurual network.<br>$$<br>\mathbf{h}_v^0 = \mathbf{x}_v \<br>\mathbf{h}_v^k = \sigma(\mathbf{W}<em>k\sum</em>{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v) \vert} + \mathbf{B}_k\mathbf{h}_v^{k-1}), \forall k\in[1,K] \<br>\mathbf{z}_v = \mathbf{h}_v^{K}<br>$$<br>Note: <em>the same set of aggregation functions are shared for all nodes, so is the model parameters. And all learnable parameters can generalize to unseen nodes.</em></p>
+<p><strong>GCN</strong> : a slight variation of the aggregation functions.<br>$$<br>\mathbf{h}_v^k = \sigma(\mathbf{W}<em>k\sum</em>{u\in N(v)\cup v}\frac{\mathbf{h}_u^{k-1}}{\sqrt{\vert N(u) \vert\vert N(v) \vert}}), \forall k\in[1,K]<br>$$<br>GCN uses the same transformation matrix $\mathbf{W}_k$ for self and neighbor nodes, and normalizes embeddings adaptively across neighbors, instead of simple average.</p>
+<p><strong>GraphSAGE</strong>: a general aggregation method rather than (weighted) average, and concatenating self embedding and neighbor enbedding .<br>$$<br>\mathbf{h}_v^k = \sigma([\mathbf{W}_k \cdot \text{AGG}({\mathbf{h}_u^{k-1},\forall u\in N(v)}),\mathbf{B}_k\mathbf{h}_v^{k-1}]), \forall k\in[1,K]<br>$$</p>
+<p>we are free to employ proper aggregation method:<br>$$<br>\begin{align}<br>\text{AGG} = \sum_{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v)\vert} &amp; \quad (mean) \<br>\text{AGG} = \gamma({\mathbf{Q}\mathbf{h}_u^{k-1}, \forall u \in N(v)}) &amp; \quad (pool) \<br>\text{AGG} = \text{LSTM}([\mathbf{h}_u^{k-1}, \forall u \in \pi(N(v))]) &amp; \quad (LSTM)<br>\end{align}<br>$$<br>GCN &amp; GraphSAGE generally only 2-3 layers deep. To handle models with $\gt20$ layers, use LSTM or RNN as the shared network across layers. </p>
+<p>**RNN &amp;&amp; LSTM ** :<br>$$<br>\mathbf{m}<em>v^k = \sum</em>{u\in N(v)} M(\mathbf{h}_u^{k-1},\mathbf{h}<em>v^{k-1},\mathbf{e}</em>{u,v}) \<br>\mathbf{h}_v^k = U(\mathbf{h}_v^{k-1},\mathbf{m}_v^k)<br>$$</p>
+<h4 id="Graph-Neural-Networks"><a href="#Graph-Neural-Networks" class="headerlink" title="Graph Neural Networks"></a>Graph Neural Networks</h4><p>Instead of aggregating information from neighbors, the intuition behind GNNs is that graphs can be viewed as specifying scaffolding for a “message passing” algorithm between nodes.</p>
 
             </div>
             <hr/>
