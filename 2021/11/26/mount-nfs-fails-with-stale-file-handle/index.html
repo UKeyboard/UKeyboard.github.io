@@ -4,10 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Representation Learning on Graphs, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
-    <meta name="description" content="Representation Learning on Graphs: Methods and Applications
-William L. Hamilton, Rex Ying, Jure Leskovec
-https://arxiv.o">
+    <meta name="keywords" content="mount -t nfs fails with Stale file handle 的解决方法, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
+    <meta name="description" content="mount -t nfs fails with Stale file handle 的解决方法最近，个人负责维护的服务器意外断电了，重新上电后NFS服务不能正常工作 —— NFS client不能挂载原先export的文件目录。尝试手动mo">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -15,7 +13,7 @@ https://arxiv.o">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Representation Learning on Graphs | Jun&#39;s Blog</title>
+    <title>mount -t nfs fails with Stale file handle 的解决方法 | Jun&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -274,13 +272,13 @@ https://arxiv.o">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Representation Learning on Graphs
+                        mount -t nfs fails with Stale file handle 的解决方法
                     </div>
                 </div>
             </div>
@@ -391,12 +389,16 @@ https://arxiv.o">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Graph-Neural-Network/" target="_blank">
-                                <span class="chip bg-color">Graph Neural Network</span>
+                            <a href="/tags/Linux/" target="_blank">
+                                <span class="chip bg-color">Linux</span>
                             </a>
                         
-                            <a href="/tags/Network-Embedding/" target="_blank">
-                                <span class="chip bg-color">Network Embedding</span>
+                            <a href="/tags/NFS/" target="_blank">
+                                <span class="chip bg-color">NFS</span>
+                            </a>
+                        
+                            <a href="/tags/File-System/" target="_blank">
+                                <span class="chip bg-color">File System</span>
                             </a>
                         
                     </div>
@@ -407,8 +409,8 @@ https://arxiv.o">
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Reading/" class="post-category" target="_blank">
-                                Reading
+                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
+                                Bugfix
                             </a>
                         
                     </div>
@@ -419,7 +421,7 @@ https://arxiv.o">
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2019-07-09
+                    2021-11-26
                 </div>
 
                 
@@ -430,112 +432,32 @@ https://arxiv.o">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Representation-Learning-on-Graphs-Methods-and-Applications"><a href="#Representation-Learning-on-Graphs-Methods-and-Applications" class="headerlink" title="Representation Learning on Graphs: Methods and Applications"></a>Representation Learning on Graphs: Methods and Applications</h2><blockquote>
-<p>William L. Hamilton, Rex Ying, Jure Leskovec</p>
-<p><a target="_blank" rel="noopener" href="https://arxiv.org/pdf/1709.05584.pdf">https://arxiv.org/pdf/1709.05584.pdf</a></p>
-<p>Machine learning on graphs is an important and ubiquitous task with applications ranging from drug design to friendship recommendation in social networks. The primary challenge in this domain is ﬁnding a way to represent, or encode, graph structure so that it can be easily exploited by machine learning models. Traditionally, machine learning approaches relied on user-deﬁned heuristics to extract features encoding structural information about a graph (e.g., degree statistics or kernel functions). However, recent years have seen a surge in approaches that automatically learn to encode graph structure into low-dimensional embeddings, using techniques based on deep learning and nonlinear dimensionality reduction. Here we provide a conceptual review of key advancements in this area of representation learning on graphs, including matrix factorization-based methods, random-walk based algorithms, and graph neural networks. We review methods to embed individual nodes as well as approaches to embed entire (sub)graphs. In doing so, we develop a uniﬁed framework to describe these recent approaches, and we highlight a number of important applications and directions for future work.</p>
-</blockquote>
-<p>The central problem in machine learning on graphs is finding a way to incorporate information about graph structure into a ML model. The challenge - from a ML perspective - is that there is no straightforward way to encode this high-dimensional non-Euclidean information about graph structure into a feature vector.</p>
-<p><strong>Extract structural information</strong>:  1) <em>Traditional methods</em> : summary graph statistics (e.g. degrees or clustering coefficients), kernel functions or carefully engineered features to measure local neighborhood structure.   2) <em>Learn to encode</em>: a surge of approaches that seek to learn representations that encode structural information about graph.</p>
-<p><strong>Representation Learning</strong>: learn a mapping that embeds nodes or entire (sub)graphs, as points in a low-dimensional vector space $\mathbf{R}^d$. The goal is to optimize then mapping so that geometric relationships in the embedding space reflect the structure of original graph.</p>
-<p><strong>Unsupervised Approaches</strong>: optimize the mapping only making use of information in $\mathbf{A}$ and $\mathbf{X}$ , without knowledge of a particular downstream ML task.</p>
-<p><strong>Supervised Approaches</strong>: optimize the mapping, making use of classification or regression labels (for individual nodes or entire subgraphs).</p>
-<p><strong>Notation</strong>:</p>
-<table>
-<thead>
-<tr>
-<th>Symbol</th>
-<th>Desc</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>$\mathcal{G}=(\mathcal{V},\mathcal{E})$</td>
-<td>undirected graph</td>
-</tr>
-<tr>
-<td>$\mathbf{A}$</td>
-<td>Binary adjacency matrix</td>
-</tr>
-<tr>
-<td>$\mathbf{X}\in\mathcal{R}^{m\times\vert\mathcal{V}\vert}$</td>
-<td>Real-valued matrix of node attributes<br />e.g. representing text or metadata associated with nodes</td>
-</tr>
-<tr>
-<td>$\mathbf{z}\in\mathcal{R}^d$</td>
-<td>node or (sub)graph embedding, where $d \ll \vert\mathcal{V}\vert$</td>
-</tr>
-<tr>
-<td>$\text{ENC:} \mathcal{V} \rightarrow \mathcal{R}^d$</td>
-<td>encoder or the embedding function or mapping function</td>
-</tr>
-<tr>
-<td>$v_i\in\mathcal{V}$</td>
-<td>the $i$-th node in graph</td>
-</tr>
-<tr>
-<td>$\mathbf{z}_i \in \mathcal{R}^d$</td>
-<td>the embedding of the $i$-the node</td>
-</tr>
-<tr>
-<td>DEC: $\mathcal{R}^d \times \mathcal{R}^d \rightarrow \mathcal{R}^{+}$</td>
-<td>decoder</td>
-</tr>
-<tr>
-<td>$s_{\mathcal{G}}$</td>
-<td>the user-defined, graph-based similarity measure between nodes, defined over the graph $\mathcal{G}$</td>
-</tr>
-</tbody></table>
-<h3 id="Embedding-Nodes"><a href="#Embedding-Nodes" class="headerlink" title="Embedding Nodes"></a>Embedding Nodes</h3><blockquote>
-<p>Encode nodes as low-dimensional vectors that summarize their graph position and the structure of their local graph neighborhood, where geometric relations in this latent space correspond to interactions in the original graph.</p>
-</blockquote>
-<h4 id="AED-encoder-decoder"><a href="#AED-encoder-decoder" class="headerlink" title="AED: encoder-decoder"></a>AED: encoder-decoder</h4><p><strong>Encoder</strong>: map nodes to vector embeddings </p>
-<p><strong>Decoder</strong>: accept a set of node embeddings and decodes user-specific graph statistics from the embeddings, for example: existence of edges, community the node belongs to. Most of the works use a basic pairwise decoder that maps pairs of node embeddings to a real-valued node similarity measure, which quantifies the similarity of the two nodes in the original graph.</p>
-<p><strong>Objective</strong>: $\text{DEC}(\text{ENC}(v_i),\text{ENC}(v_j)) = \text{DEC}(\mathbf{z}_i,\mathbf{z}<em>j) \approx s</em>{\mathcal{G}}(v_i,v_j)$ </p>
-<p>Most approaches defines a user-specified loss function, which measure the discrepancy between the decodeed similarity values $\text{DEC}(\mathbf{z}<em>i,\mathbf{z}<em>j)$ and the true values $s</em>{\mathcal{G}}(v_i,v_j)$ .<br>$$<br>\mathcal{L} = \sum</em>{(v_i,v_j)\in\mathcal{D}} \mathcal{l}(\text{DEC}(\mathbf{z}_i,\mathbf{z}<em>j), s</em>{\mathcal{G}}(v_i,v_j))<br>$$<br><strong>4 Methodological Components</strong>: </p>
-<ol>
-<li><strong>pairwise similarity function</strong>: $s_{\mathcal{G}}: \mathcal{V} \times \mathcal{V} \rightarrow \mathcal{R}^{+}$ defined over the graph $\mathcal{G}$ , measuring the similarity between nodes</li>
-<li><strong>encoder function</strong> defines how to map nodes in graph into embedding vectors.</li>
-<li><strong>decoder function</strong> defines how to reconstruct the pairwise similarity values.</li>
-<li><strong>loss function</strong> defines how to compare the reconstructions and the true values.</li>
-</ol>
-<p><span style="color:red">Note: we ignore the shallow embedding approaches (i.e. Matrix Factorization &amp; Random walk). Please refer to the original paper for more information.</span></p>
-<h4 id="Neighborhood-autoencoder-methods"><a href="#Neighborhood-autoencoder-methods" class="headerlink" title="Neighborhood autoencoder methods"></a>Neighborhood autoencoder methods</h4><table>
-<thead>
-<tr>
-<th>Method</th>
-<th>encoder</th>
-<th>decoder</th>
-<th>loss function</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><a target="_blank" rel="noopener" href="https://pdfs.semanticscholar.org/1a37/f07606d60df365d74752857e8ce909f700b3.pdf">DNGR</a></td>
-<td>$\mathbf{z}_i = \text{ENC}(v_i)=\text{ENC}(\mathbf{s}_i)$, the pointwise mutual information of 2 nodes co-occurring on random walks , similar to DeepWalk, $\mathbf{S}$ contains pairwise node similarities</td>
-<td>$\text{DEC}(\mathbf{z_i}) \approx \mathbf{s}_i$</td>
-<td>$\mathcal{L}=\sum_{v_i\in\mathcal{V}}{\Vert\text{DEC}(\mathbf{z}_i) - \mathbf{s}_i\Vert}_2^2$</td>
-</tr>
-<tr>
-<td><a target="_blank" rel="noopener" href="https://www.kdd.org/kdd2016/papers/files/rfp0191-wangAemb.pdf">SDNE</a></td>
-<td>$\mathbf{z}_i = \text{ENC}(v_i)=\text{ENC}(\mathbf{s}_i)$, $\mathbf{s}_i \triangleq \mathbf{A}_i,$ as $v_i$’s adjacency vector, $\mathbf{S}$ contains pairwise node similarities</td>
-<td>$\text{DEC}(\mathbf{z_i}) \approx \mathbf{s}_i$</td>
-<td>$\mathcal{L}=\sum_{v_i\in\mathcal{V}}{\Vert\text{DEC}(\mathbf{z}_i) - \mathbf{s}_i\Vert}_2^2$</td>
-</tr>
-</tbody></table>
-<p>Input vector $\mathbf{s}_i$ contains information about $v_i$’s local graph graph neighborhood. The goal is to compress the node’s neighborhood informatin into a low-dimensional vector.</p>
-<h4 id="Neighborhood-aggregation-amp-Conv-Encoders"><a href="#Neighborhood-aggregation-amp-Conv-Encoders" class="headerlink" title="Neighborhood aggregation &amp; Conv-Encoders"></a>Neighborhood aggregation &amp; Conv-Encoders</h4><p>“<em>By designing encoders that rely on a node’s local neighborhood (by aggregating information from its local neighborhood), but not necessarily the entire graph</em>.”  </p>
-<p><img src="https://i.loli.net/2019/07/10/5d25fc817f6cc69866.png" alt="A deep-2 version of information aggregation"></p>
+                <h2 id="mount-t-nfs-fails-with-Stale-file-handle-的解决方法"><a href="#mount-t-nfs-fails-with-Stale-file-handle-的解决方法" class="headerlink" title="mount -t nfs fails with Stale file handle 的解决方法"></a><code>mount -t nfs</code> fails with <code>Stale file handle</code> 的解决方法</h2><p>最近，个人负责维护的服务器意外断电了，重新上电后NFS服务不能正常工作 —— NFS client不能挂载原先export的文件目录。尝试手动<code>mount -t nfs xxx</code>出现<code>mount.nfs: Stale file handle</code>的错误提示。最终通过<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/users/1131/maxschlepzig">maxschlepzig</a>提供的解决方案将问题处理了。</p>
+<p>以下是原答案：</p>
 <blockquote>
-<p>In cases where attribute data is not given, these methods can use simple graph statistics as attributes (e.g., node degrees) , or assign each node a one-hot indicator vector as an attribute. <strong>These methods<br>are often called <em>convolutional</em> because they represent a node as a function of its surrounding neighborhood, in a manner similar to the receptive field of a center-surround convolutional kernel in computer vision.</strong> </p>
+<p>A <code>mount -t nfs</code> fails with <code>Stale file handle</code> if the server has some stale exports entries for that client.</p>
+<p>Example scenario: this might happen when the server reboots without the client umounting the nfs volumes first. When the server is back and the client then umounts and tries to mount the nfs volume the server might respond with:</p>
+<p><code>mount.nfs: Stale file handle</code></p>
+<p>You can check for this via looking at <code>/proc/fs/nfs/exports</code> or <code>/proc/fs/nfsd/exports</code>. If there is entry for the client it might be a stale one.</p>
+<p>You can fix this via explicitly un-exporting and re-exporting the relevant exports on the server. For example to do this with all exports:</p>
+<pre><code class="shell">exportfs -ua
+cat /proc/fs/nfs/exports
+exportfs -a
+</code></pre>
+<p>After this the client’s <code>mount -t nfs ...</code> should succeed.</p>
+<p>Note that mount yielding ESTALE is quite different from some other system call (like open/readdir/unlink/chdir …) returning ESTALE. It’s export being stale vs. a file handle being stale. A stale file handle easily happens with NFS (e.g. a client has a file handle but the file got deleted on the server).</p>
 </blockquote>
-<p><img src="https://i.loli.net/2019/07/10/5d260145b0acc42260.png" alt="Neighborhood-aggregation encoder algorithm"></p>
-<p>The trainable parameters is a set of aggregation functions and a set of weight matrices ${\mathbf{W}^k, \forall k \in [1,K]}$ . Methods follow this algorithm often differ primarily in how the aggregation and vector combination are performed.</p>
-<p><img src="https://i.loli.net/2019/07/11/5d26a3c5ca2fc22486.png" alt="Aggregation &amp; Combination"></p>
-<p>The basic approach - average neighbor messages and apply a neurual network.<br>$$<br>\mathbf{h}_v^0 = \mathbf{x}_v \<br>\mathbf{h}_v^k = \sigma(\mathbf{W}<em>k\sum</em>{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v) \vert} + \mathbf{B}_k\mathbf{h}_v^{k-1}), \forall k\in[1,K] \<br>\mathbf{z}_v = \mathbf{h}_v^{K}<br>$$<br>Note: <em>the same set of aggregation functions are shared for all nodes, so is the model parameters. And all learnable parameters can generalize to unseen nodes.</em></p>
-<p><strong>GCN</strong> : a slight variation of the aggregation functions.<br>$$<br>\mathbf{h}_v^k = \sigma(\mathbf{W}<em>k\sum</em>{u\in N(v)\cup v}\frac{\mathbf{h}_u^{k-1}}{\sqrt{\vert N(u) \vert\vert N(v) \vert}}), \forall k\in[1,K]<br>$$<br>GCN uses the same transformation matrix $\mathbf{W}_k$ for self and neighbor nodes, and normalizes embeddings adaptively across neighbors, instead of simple average.</p>
-<p><strong>GraphSAGE</strong>: a general aggregation method rather than (weighted) average, and concatenating self embedding and neighbor enbedding .<br>$$<br>\mathbf{h}_v^k = \sigma([\mathbf{W}_k \cdot \text{AGG}({\mathbf{h}_u^{k-1},\forall u\in N(v)}),\mathbf{B}_k\mathbf{h}_v^{k-1}]), \forall k\in[1,K]<br>$$</p>
-<p>we are free to employ proper aggregation method:<br>$$<br>\begin{align}<br>\text{AGG} = \sum_{u\in N(v)}\frac{\mathbf{h}_u^{k-1}}{\vert N(v)\vert} &amp; \quad (mean) \<br>\text{AGG} = \gamma({\mathbf{Q}\mathbf{h}_u^{k-1}, \forall u \in N(v)}) &amp; \quad (pool) \<br>\text{AGG} = \text{LSTM}([\mathbf{h}_u^{k-1}, \forall u \in \pi(N(v))]) &amp; \quad (LSTM)<br>\end{align}<br>$$<br>GCN &amp; GraphSAGE generally only 2-3 layers deep. To handle models with $\gt20$ layers, use LSTM or RNN as the shared network across layers. </p>
-<p>**RNN &amp;&amp; LSTM ** :<br>$$<br>\mathbf{m}<em>v^k = \sum</em>{u\in N(v)} M(\mathbf{h}_u^{k-1},\mathbf{h}<em>v^{k-1},\mathbf{e}</em>{u,v}) \<br>\mathbf{h}_v^k = U(\mathbf{h}_v^{k-1},\mathbf{m}_v^k)<br>$$</p>
-<h4 id="Graph-Neural-Networks"><a href="#Graph-Neural-Networks" class="headerlink" title="Graph Neural Networks"></a>Graph Neural Networks</h4><p>Instead of aggregating information from neighbors, the intuition behind GNNs is that graphs can be viewed as specifying scaffolding for a “message passing” algorithm between nodes.</p>
+<p>根据博主的描述，我确实在<code>/proc/fs/nfs/exports</code>中找到无效的共享路径。主要经过以下几步：</p>
+<ol>
+<li>在NFS服务所在机器上通过<code>exportfs -v</code>或<code>showmount -e</code>查看当前机器共享出来的路径；</li>
+<li>查看<code>/proc/fs/nfs/exports</code>的共享路径是否和步骤1一致；</li>
+<li>如果不一致，将<code>/proc/fs/nfs/exports</code>文件删除，并通过命令<code>exportfs -ua</code>取消当前共享；然后运行命令<code>exportfs -ra</code>重新共享路径；</li>
+<li>检查<code>/proc/fs/nfs/exports</code>路径是否符合预期；</li>
+<li>前往客户机执行<code>mount -t nfs ...</code>、<code>mount -a</code>等挂载命令进行NFS挂载。</li>
+</ol>
+<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/a/447581">https://unix.stackexchange.com/a/447581</a></li>
+</ol>
 
             </div>
             <hr/>
@@ -570,9 +492,9 @@ https://arxiv.o">
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《Representation Learning on Graphs》
+                    《mount -t nfs fails with Stale file handle 的解决方法》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2019/07/09/Representation-Learning-on-Graphs/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/11/26/mount-nfs-fails-with-stale-file-handle/" property="cc:attributionName"
                rel="cc:attributionURL">
                 Jun He
             </a> 采用
@@ -613,7 +535,7 @@ https://arxiv.o">
         repo: 'gitalk',
         owner: 'UKeyboard',
         admin: ["UKeyboard"],
-        id: '2019-07-09T21-41-25',
+        id: '2021-11-26T22-52-42',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -634,9 +556,10 @@ https://arxiv.o">
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/11/26/mount-nfs-fails-with-stale-file-handle/">
                     <div class="card-image">
@@ -654,9 +577,9 @@ https://arxiv.o">
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-26
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-26
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -669,6 +592,7 @@ https://arxiv.o">
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -695,32 +619,33 @@ https://arxiv.o">
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2019/06/17/how-to-print-fullsize-screenshot-on-multi-a4-paper/">
+                <a href="/2019/07/09/Representation-Learning-on-Graphs/">
                     <div class="card-image">
                         
-                        <img src="https://i.loli.net/2019/06/17/5d06fc127e32f63018.jpg" class="responsive-img" alt="如何多页A4纸打印一张滚动长图">
                         
-                        <span class="card-title">如何多页A4纸打印一张滚动长图</span>
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Representation Learning on Graphs">
+                        
+                        <span class="card-title">Representation Learning on Graphs</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            如何多页A4打印一张滚动长图图片打印功能多是一张图一页纸，默认不支持跨页打印。
-对于一张长图而言，默认将图片进行缩放使得一张A4能够容纳这张长图，必然导致打印内容过小看不清楚。如果选择适应页面宽度则图片仅部分可视，超出页面部分将不被打印。
-
+                            Representation Learning on Graphs: Methods and Applications
+William L. Hamilton, Rex Ying, Jure Leskovec
+https://arxiv.o
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-06-17
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-09
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/wiki/" class="post-category" target="_blank">
-                                    wiki
+                            <a href="/categories/Reading/" class="post-category" target="_blank">
+                                    Reading
                                 </a>
                             
                             
@@ -730,16 +655,12 @@ https://arxiv.o">
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Chrome/" target="_blank">
-                        <span class="chip bg-color">Chrome</span>
+                    <a href="/tags/Graph-Neural-Network/" target="_blank">
+                        <span class="chip bg-color">Graph Neural Network</span>
                     </a>
                     
-                    <a href="/tags/Screenshot/" target="_blank">
-                        <span class="chip bg-color">Screenshot</span>
-                    </a>
-                    
-                    <a href="/tags/Print/" target="_blank">
-                        <span class="chip bg-color">Print</span>
+                    <a href="/tags/Network-Embedding/" target="_blank">
+                        <span class="chip bg-color">Network Embedding</span>
                     </a>
                     
                 </div>
@@ -887,13 +808,6 @@ https://arxiv.o">
 
 </main>
 
-
-<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script>
-    MathJax.Hub.Config({
-        tex2jax: {inlineMath: [['$', '$'], ['\(', '\)']]}
-    });
-</script>
 
 <footer class="page-footer bg-color">
     <div class="container row center-align">

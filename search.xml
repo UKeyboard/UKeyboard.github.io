@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>mount -t nfs fails with Stale file handle 的解决方法</title>
+      <link href="/2021/11/26/mount-nfs-fails-with-stale-file-handle/"/>
+      <url>/2021/11/26/mount-nfs-fails-with-stale-file-handle/</url>
+      
+        <content type="html"><![CDATA[<h2 id="mount-t-nfs-fails-with-Stale-file-handle-的解决方法"><a href="#mount-t-nfs-fails-with-Stale-file-handle-的解决方法" class="headerlink" title="mount -t nfs fails with Stale file handle 的解决方法"></a><code>mount -t nfs</code> fails with <code>Stale file handle</code> 的解决方法</h2><p>最近，个人负责维护的服务器意外断电了，重新上电后NFS服务不能正常工作 —— NFS client不能挂载原先export的文件目录。尝试手动<code>mount -t nfs xxx</code>出现<code>mount.nfs: Stale file handle</code>的错误提示。最终通过<a href="https://unix.stackexchange.com/users/1131/maxschlepzig">maxschlepzig</a>提供的解决方案将问题处理了。</p><p>以下是原答案：</p><blockquote><p>A <code>mount -t nfs</code> fails with <code>Stale file handle</code> if the server has some stale exports entries for that client.</p><p>Example scenario: this might happen when the server reboots without the client umounting the nfs volumes first. When the server is back and the client then umounts and tries to mount the nfs volume the server might respond with:</p><p><code>mount.nfs: Stale file handle</code></p><p>You can check for this via looking at <code>/proc/fs/nfs/exports</code> or <code>/proc/fs/nfsd/exports</code>. If there is entry for the client it might be a stale one.</p><p>You can fix this via explicitly un-exporting and re-exporting the relevant exports on the server. For example to do this with all exports:</p><pre><code class="shell">exportfs -uacat /proc/fs/nfs/exportsexportfs -a</code></pre><p>After this the client’s <code>mount -t nfs ...</code> should succeed.</p><p>Note that mount yielding ESTALE is quite different from some other system call (like open/readdir/unlink/chdir …) returning ESTALE. It’s export being stale vs. a file handle being stale. A stale file handle easily happens with NFS (e.g. a client has a file handle but the file got deleted on the server).</p></blockquote><p>根据博主的描述，我确实在<code>/proc/fs/nfs/exports</code>中找到无效的共享路径。主要经过以下几步：</p><ol><li>在NFS服务所在机器上通过<code>exportfs -v</code>或<code>showmount -e</code>查看当前机器共享出来的路径；</li><li>查看<code>/proc/fs/nfs/exports</code>的共享路径是否和步骤1一致；</li><li>如果不一致，将<code>/proc/fs/nfs/exports</code>文件删除，并通过命令<code>exportfs -ua</code>取消当前共享；然后运行命令<code>exportfs -ra</code>重新共享路径；</li><li>检查<code>/proc/fs/nfs/exports</code>路径是否符合预期；</li><li>前往客户机执行<code>mount -t nfs ...</code>、<code>mount -a</code>等挂载命令进行NFS挂载。</li></ol><h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol><li><a href="https://unix.stackexchange.com/a/447581">https://unix.stackexchange.com/a/447581</a></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Bugfix </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Linux </tag>
+            
+            <tag> NFS </tag>
+            
+            <tag> File System </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Representation Learning on Graphs</title>
       <link href="/2019/07/09/Representation-Learning-on-Graphs/"/>
       <url>/2019/07/09/Representation-Learning-on-Graphs/</url>
