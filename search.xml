@@ -4,7 +4,7 @@
   
     
     <entry>
-      <title>Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误</title>
+      <title>Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误</title>
       <link href="/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/"/>
       <url>/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/</url>
       
@@ -22,7 +22,7 @@
             
             <tag> Elasticsearch </tag>
             
-            <tag> Issue </tag>
+            <tag> Issues </tag>
             
         </tags>
       
@@ -273,7 +273,7 @@
             
             <tag> Matlab </tag>
             
-            <tag> Issuse </tag>
+            <tag> Issues </tag>
             
         </tags>
       
