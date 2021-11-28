@@ -4,8 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mount -t nfs fails with Stale file handle 的解决方法, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
-    <meta name="description" content="mount -t nfs fails with Stale file handle 的解决方法最近，个人负责维护的服务器意外断电了，重新上电后NFS服务不能正常工作 —— NFS client不能挂载原先export的文件目录。尝试手动mo">
+    <meta name="keywords" content="Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
+    <meta name="description" content="Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误问题说明在部署Elasticsearch时，我们通常要在配置文件/usr/">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +13,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>mount -t nfs fails with Stale file handle 的解决方法 | Jun&#39;s Blog</title>
+    <title>Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误 | Jun&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -272,13 +272,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        mount -t nfs fails with Stale file handle 的解决方法
+                        Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误
                     </div>
                 </div>
             </div>
@@ -389,16 +389,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Linux/" target="_blank">
-                                <span class="chip bg-color">Linux</span>
+                            <a href="/tags/Elasticsearch/" target="_blank">
+                                <span class="chip bg-color">Elasticsearch</span>
                             </a>
                         
-                            <a href="/tags/NFS/" target="_blank">
-                                <span class="chip bg-color">NFS</span>
-                            </a>
-                        
-                            <a href="/tags/File-System/" target="_blank">
-                                <span class="chip bg-color">File System</span>
+                            <a href="/tags/Issue/" target="_blank">
+                                <span class="chip bg-color">Issue</span>
                             </a>
                         
                     </div>
@@ -421,7 +417,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-26
+                    2021-11-28
                 </div>
 
                 
@@ -432,32 +428,92 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="mount-t-nfs-fails-with-Stale-file-handle-的解决方法"><a href="#mount-t-nfs-fails-with-Stale-file-handle-的解决方法" class="headerlink" title="mount -t nfs fails with Stale file handle 的解决方法"></a><code>mount -t nfs</code> fails with <code>Stale file handle</code> 的解决方法</h2><p>最近，个人负责维护的服务器意外断电了，重新上电后NFS服务不能正常工作 —— NFS client不能挂载原先export的文件目录。尝试手动<code>mount -t nfs xxx</code>出现<code>mount.nfs: Stale file handle</code>的错误提示。最终通过<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/users/1131/maxschlepzig">maxschlepzig</a>提供的解决方案将问题处理了。</p>
-<p>以下是原答案：</p>
-<blockquote>
-<p>A <code>mount -t nfs</code> fails with <code>Stale file handle</code> if the server has some stale exports entries for that client.</p>
-<p>Example scenario: this might happen when the server reboots without the client umounting the nfs volumes first. When the server is back and the client then umounts and tries to mount the nfs volume the server might respond with:</p>
-<p><code>mount.nfs: Stale file handle</code></p>
-<p>You can check for this via looking at <code>/proc/fs/nfs/exports</code> or <code>/proc/fs/nfsd/exports</code>. If there is entry for the client it might be a stale one.</p>
-<p>You can fix this via explicitly un-exporting and re-exporting the relevant exports on the server. For example to do this with all exports:</p>
-<pre><code class="shell">exportfs -ua
-cat /proc/fs/nfs/exports
-exportfs -a
+                <h2 id="Elasticsearch报org-elasticsearch-bootstrap-StartupException-ElasticsearchException错误"><a href="#Elasticsearch报org-elasticsearch-bootstrap-StartupException-ElasticsearchException错误" class="headerlink" title="Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误"></a>Elasticsearch报<code>org.elasticsearch.bootstrap.StartupException:ElasticsearchException</code>错误</h2><h3 id="问题说明"><a href="#问题说明" class="headerlink" title="问题说明"></a>问题说明</h3><p>在部署Elasticsearch时，我们通常要在配置文件<code>/usr/share/elasticsearch/config/elasticsearch.yml</code>中配置数据存储路径，如下：</p>
+<pre><code class="yaml">...
+...
+
+path.data: /usr/share/elasticsearch/data
+
+...
+...
 </code></pre>
-<p>After this the client’s <code>mount -t nfs ...</code> should succeed.</p>
-<p>Note that mount yielding ESTALE is quite different from some other system call (like open/readdir/unlink/chdir …) returning ESTALE. It’s export being stale vs. a file handle being stale. A stale file handle easily happens with NFS (e.g. a client has a file handle but the file got deleted on the server).</p>
-</blockquote>
-<p>根据博主的描述，我确实在<code>/proc/fs/nfs/exports</code>中找到无效的共享路径。主要经过以下几步：</p>
-<ol>
-<li>在NFS服务所在机器上通过<code>exportfs -v</code>或<code>showmount -e</code>查看当前机器共享出来的路径；</li>
-<li>查看<code>/proc/fs/nfs/exports</code>的共享路径是否和步骤1一致；</li>
-<li>如果不一致，将<code>/proc/fs/nfs/exports</code>文件删除，并通过命令<code>exportfs -ua</code>取消当前共享；然后运行命令<code>exportfs -ra</code>重新共享路径；</li>
-<li>检查<code>/proc/fs/nfs/exports</code>路径是否符合预期；</li>
-<li>前往客户机执行<code>mount -t nfs ...</code>、<code>mount -a</code>等挂载命令进行NFS挂载。</li>
-</ol>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><ol>
-<li><a target="_blank" rel="noopener" href="https://unix.stackexchange.com/a/447581">https://unix.stackexchange.com/a/447581</a></li>
-</ol>
+<p>但是，如果在运行Elasticsearch时用户没有该数据目录的读写权限就会导致Elasticsearch报<code>org.elasticsearch.bootstrap.StartupException:ElasticsearchException</code>错误。</p>
+<p>这类错误通常在使用<code>docker</code>或在Kubernetes中部署Elasticsearch时会比较常遇到，主要是因问通过这两种方式部署Elasticsearch时，Elasticsearch在容器内以<code>elasticsearch (uid：1000)</code>运行，如果挂在的外部目录在所有用户ID不是1000或者其他用户对该目录没有访问权限，就会导致上述权限问题。</p>
+<h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>解决这类问题最直接的方法是在宿主机（host）上直接将目录的访问权限设置为<code>777</code>或者将目录的所有者切换成UID=1000的用户，如下：</p>
+<pre><code class="shell"># 修改目录的访问权限
+chmod -R 777 /path/to/folder
+# or
+chmod -R a+rw /path/to/folder
+
+# 修改目录所有者
+chown -R 1000 /path/to/folder
+</code></pre>
+<p>如果是在k8s中遇到这个问题还可以用<code>initContainers</code>在启动Pod前判断目录的所有者或权限并按需进行修改，使得文件或目录在用于Pod前拥有适当的权限设置。下面是我在实际应用中使用的方法：</p>
+<pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  labels:
+    role: deploy
+    target: elasticsearch
+spec:
+  replicas: 1 # currently only run in standalone mode
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+        role: pod
+    spec:
+      volumes:
+        - name: elasticsearch-yml
+          configMap:
+            name: elasticsearch
+            items:
+              - key: elasticsearch.yml
+                path: elasticsearch.yml
+        - name: data
+          persistentVolumeClaim:
+            claimName: elasticsearch
+      containers:
+      - name: elasticsearch
+        image: registry.example.com/elasticsearch:7.15.2 
+        resources:
+            limits:
+              ...
+              ...
+              ...
+        ports:
+        ...
+        ...
+        ...
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+        - name: elasticsearch-yml
+          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          subPath: elasticsearch.yml
+        env:
+          - name: node.name
+          ...
+          ...
+          ...
+          - name: ES_JAVA_OPTS
+            value: &quot;-Xms512m -Xmx512m&quot; 
+      initContainers:
+      - name: fix-permissions
+        image: registry.example.com/busybox:latest
+        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;if [ `stat -c &#39;%u&#39; /usr/share/elasticsearch/data`x != &#39;1000x&#39; ]; then chown -R 1000:1000 /usr/share/elasticsearch/data; fi&quot;]
+        # securityContext:
+        #   privileged: true
+        volumeMounts:
+        - name: data
+          mountPath: /usr/share/elasticsearch/data
+</code></pre>
+<p>可以看到，在启动Pod前<code>initContainers</code>尝试判断目录所有者是不是UID=1000用户，如果不是则将其所有者修改问1000:1000。</p>
+<p>注意：如果目录是从宿主机挂载的，比如通过NFS等形式，<code>initContainers</code>在容器内对目录权限的修改会同步反应在宿主机目录上。在宿主机上切换到相应的目录，可以发现目录所有者在宿主机上的UID也是1000.</p>
 
             </div>
             <hr/>
@@ -492,9 +548,9 @@ exportfs -a
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《mount -t nfs fails with Stale file handle 的解决方法》
+                    《Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/11/26/mount-nfs-fails-with-stale-file-handle/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/" property="cc:attributionName"
                rel="cc:attributionURL">
                 Jun He
             </a> 采用
@@ -535,7 +591,7 @@ exportfs -a
         repo: 'gitalk',
         owner: 'UKeyboard',
         admin: ["UKeyboard"],
-        id: '2021-11-26T22-52-42',
+        id: '2021-11-28T11-50-24',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -556,9 +612,64 @@ exportfs -a
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误">
+                        
+                        <span class="card-title">Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误问题说明在部署Elasticsearch时，我们通常要在配置文件/usr/
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-28
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fa fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
+                                    Bugfix
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Elasticsearch/" target="_blank">
+                        <span class="chip bg-color">Elasticsearch</span>
+                    </a>
+                    
+                    <a href="/tags/Issue/" target="_blank">
+                        <span class="chip bg-color">Issue</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2021/11/28/%E5%85%B3%E4%BA%8Ek8s-emptyDir-%E7%9A%84%E5%87%A0%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9/">
                     <div class="card-image">
@@ -576,9 +687,9 @@ exportfs -a
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -600,61 +711,6 @@ exportfs -a
                     
                     <a href="/tags/Kubernetes-cluster/" target="_blank">
                         <span class="chip bg-color">Kubernetes cluster</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fa fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2019/07/09/Representation-Learning-on-Graphs/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Representation Learning on Graphs">
-                        
-                        <span class="card-title">Representation Learning on Graphs</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Representation Learning on Graphs: Methods and Applications
-William L. Hamilton, Rex Ying, Jure Leskovec
-https://arxiv.o
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2019-07-09
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fa fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/Reading/" class="post-category" target="_blank">
-                                    Reading
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Graph-Neural-Network/" target="_blank">
-                        <span class="chip bg-color">Graph Neural Network</span>
-                    </a>
-                    
-                    <a href="/tags/Network-Embedding/" target="_blank">
-                        <span class="chip bg-color">Network Embedding</span>
                     </a>
                     
                 </div>

@@ -6,7 +6,7 @@
   <link href="https://ukeyboard.github.io/atom.xml" rel="self"/>
   
   <link href="https://ukeyboard.github.io/"/>
-  <updated>2021-11-26T15:21:31.913Z</updated>
+  <updated>2021-11-28T04:22:56.715Z</updated>
   <id>https://ukeyboard.github.io/</id>
   
   <author>
@@ -15,6 +15,64 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Elasticsearch报org.elasticsearch.bootstrap.StartupException: ElasticsearchException错误</title>
+    <link href="https://ukeyboard.github.io/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/"/>
+    <id>https://ukeyboard.github.io/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/</id>
+    <published>2021-11-28T03:50:24.000Z</published>
+    <updated>2021-11-28T04:22:56.715Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Elasticsearch报org-elasticsearch-bootstrap-StartupException-ElasticsearchException错误"><a href="#Elasticsearch报org-elasticsearch-bootstrap-StartupException-ElasticsearchException错误" class="headerlink" title="Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误"></a>Elasticsearch报<code>org.elasticsearch.bootstrap.StartupException:ElasticsearchException</code>错误</h2><h3 id="问题说明"><a href="#问题说明" class="headerlink" title="问题说明"></a>问题说明</h3><p>在部署Elasticsearch时，我们通常要在配置文件<code>/usr/share/elasticsearch/config/elasticsearch.yml</code>中配置数据存储路径，如下：</p><pre><code class="yaml">......path.data: /usr/share/elasticsearch/data......</code></pre><p>但是，如果在运行Elasticsearch时用户没有该数据目录的读写权限就会导致Elasticsearch报<code>org.elasticsearch.bootstrap.StartupException:ElasticsearchException</code>错误。</p><p>这类错误通常在使用<code>docker</code>或在Kubernetes中部署Elasticsearch时会比较常遇到，主要是因问通过这两种方式部署Elasticsearch时，Elasticsearch在容器内以<code>elasticsearch (uid：1000)</code>运行，如果挂在的外部目录在所有用户ID不是1000或者其他用户对该目录没有访问权限，就会导致上述权限问题。</p><h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>解决这类问题最直接的方法是在宿主机（host）上直接将目录的访问权限设置为<code>777</code>或者将目录的所有者切换成UID=1000的用户，如下：</p><pre><code class="shell"># 修改目录的访问权限chmod -R 777 /path/to/folder# orchmod -R a+rw /path/to/folder# 修改目录所有者chown -R 1000 /path/to/folder</code></pre><p>如果是在k8s中遇到这个问题还可以用<code>initContainers</code>在启动Pod前判断目录的所有者或权限并按需进行修改，使得文件或目录在用于Pod前拥有适当的权限设置。下面是我在实际应用中使用的方法：</p><pre><code class="yaml">apiVersion: apps/v1kind: Deploymentmetadata:  name: elasticsearch  labels:    role: deploy    target: elasticsearchspec:  replicas: 1 # currently only run in standalone mode  selector:    matchLabels:      app: elasticsearch  template:    metadata:      labels:        app: elasticsearch        role: pod    spec:      volumes:        - name: elasticsearch-yml          configMap:            name: elasticsearch            items:              - key: elasticsearch.yml                path: elasticsearch.yml        - name: data          persistentVolumeClaim:            claimName: elasticsearch      containers:      - name: elasticsearch        image: registry.example.com/elasticsearch:7.15.2         resources:            limits:              ...              ...              ...        ports:        ...        ...        ...        volumeMounts:        - name: data          mountPath: /usr/share/elasticsearch/data        - name: elasticsearch-yml          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml          subPath: elasticsearch.yml        env:          - name: node.name          ...          ...          ...          - name: ES_JAVA_OPTS            value: &quot;-Xms512m -Xmx512m&quot;       initContainers:      - name: fix-permissions        image: registry.example.com/busybox:latest        command: [&quot;sh&quot;, &quot;-c&quot;, &quot;if [ `stat -c &#39;%u&#39; /usr/share/elasticsearch/data`x != &#39;1000x&#39; ]; then chown -R 1000:1000 /usr/share/elasticsearch/data; fi&quot;]        # securityContext:        #   privileged: true        volumeMounts:        - name: data          mountPath: /usr/share/elasticsearch/data</code></pre><p>可以看到，在启动Pod前<code>initContainers</code>尝试判断目录所有者是不是UID=1000用户，如果不是则将其所有者修改问1000:1000。</p><p>注意：如果目录是从宿主机挂载的，比如通过NFS等形式，<code>initContainers</code>在容器内对目录权限的修改会同步反应在宿主机目录上。在宿主机上切换到相应的目录，可以发现目录所有者在宿主机上的UID也是1000.</p>]]></content>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Elasticsearch报org-elasticsearch-bootstrap-StartupException-ElasticsearchException错误&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Bugfix" scheme="https://ukeyboard.github.io/categories/Bugfix/"/>
+    
+    
+    <category term="Elasticsearch" scheme="https://ukeyboard.github.io/tags/Elasticsearch/"/>
+    
+    <category term="Issue" scheme="https://ukeyboard.github.io/tags/Issue/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>关于k8s emptyDir的几个知识点</title>
+    <link href="https://ukeyboard.github.io/2021/11/28/%E5%85%B3%E4%BA%8Ek8s-emptyDir-%E7%9A%84%E5%87%A0%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9/"/>
+    <id>https://ukeyboard.github.io/2021/11/28/%E5%85%B3%E4%BA%8Ek8s-emptyDir-%E7%9A%84%E5%87%A0%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9/</id>
+    <published>2021-11-28T03:36:26.000Z</published>
+    <updated>2021-11-28T03:44:02.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="关于k8s-emptyDir的几个知识点"><a href="#关于k8s-emptyDir的几个知识点" class="headerlink" title="关于k8s emptyDir的几个知识点"></a>关于k8s emptyDir的几个知识点</h2><p>下面是关于Kubernetes （简称k8s）中<code>emptyDir</code> volume 的几个知识点，转载自：<a href="https://www.devopsschool.com/blog/kubernetes-volume-emptydir-explained-with-examples/">Kubernetes volume emptyDir explained with examples</a>。</p><blockquote><p>Here are the following facts for emptyDir storage type in Kubernetes</p><ul><li>An emptyDir volume is first created when a Pod is assigned to a Node and initially its empty</li><li>A Volume of type emptyDir that lasts for the life of the Pod, even if the Container terminates and restarts.</li><li>If a container in a Pod crashes the emptyDir content is unaffected.</li><li>All containers in a Pod share use of the emptyDir volume .</li><li>Each container can independently mount the emptyDir at the same / or different path.</li><li>Using emptyDir, The Kubelet will create the directory in the container, but not mount any storage.</li><li>Containers in the Pod can all read/write the same files in the emptyDir volume, though that volume can be mounted at the same or different paths in each Container.</li><li>When a Pod is removed from a node for any reason, the data in the emptyDir is deleted forever along with the container.</li><li>A Container crashing does NOT remove a Pod from a node, so the data in an emptyDir volume is safe across Container crashes.</li><li>By default, emptyDir volumes are stored on whatever medium is backing the node – that might be disk or SSD or network storage.</li><li>You can set the emptyDir.medium field to “Memory” to tell Kubernetes to mount a tmpfs (RAM-backed filesystem) for you instead.</li><li>The location should of emptyDir should be in <code>/var/lib/kubelet/pods/&#123;podid&#125;/volumes/kubernetes.io~empty-dir/</code> on the given node where your pod is running.</li></ul></blockquote>]]></content>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;关于k8s-emptyDir的几个知识点&quot;&gt;&lt;a href=&quot;#关于k8s-emptyDir的几个知识点&quot; class=&quot;headerlink&quot; title=&quot;关于k8s emptyDir的几个知识点&quot;&gt;&lt;/a&gt;关于k8s</summary>
+        
+      
+    
+    
+    
+    <category term="wiki" scheme="https://ukeyboard.github.io/categories/wiki/"/>
+    
+    
+    <category term="Linux" scheme="https://ukeyboard.github.io/tags/Linux/"/>
+    
+    <category term="Kubernetes cluster" scheme="https://ukeyboard.github.io/tags/Kubernetes-cluster/"/>
+    
+  </entry>
   
   <entry>
     <title>mount -t nfs fails with Stale file handle 的解决方法</title>
