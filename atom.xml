@@ -6,7 +6,7 @@
   <link href="https://ukeyboard.github.io/atom.xml" rel="self"/>
   
   <link href="https://ukeyboard.github.io/"/>
-  <updated>2021-11-29T11:54:20.162Z</updated>
+  <updated>2021-12-02T06:53:17.992Z</updated>
   <id>https://ukeyboard.github.io/</id>
   
   <author>
@@ -15,6 +15,37 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</title>
+    <link href="https://ukeyboard.github.io/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/"/>
+    <id>https://ukeyboard.github.io/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/</id>
+    <published>2021-12-02T06:33:40.000Z</published>
+    <updated>2021-12-02T06:53:17.992Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码"><a href="#解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码" class="headerlink" title="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码"></a>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</h2><h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接报类似下面这样的错误：</p><blockquote><p>You cannot visit xxxxxx right now because the website sent scrambled credentials that Google Chrome cannot process. Network errors and attacks are usually temporary, so this page will probably work later.</p></blockquote><p>具体情况如下图所示：<br><img src="https://docs.microsoft.com/answers/storage/attachments/12039-screen-shot-2020-07-14-at-30445-pm.png" alt="Chrome NET::ERR_CERT_INVALID"></p><p>通常出现这种状况Chrome会在页面折叠起来的“高级”或”Advance”里提供一个可以访问的连接，尽管存在风险。但是，这次没有任何可以点击的连接，只有 <code>NET::ERR_CERT_INVALID</code>错误。</p><h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>从页面提供的信息来看是因为证书的变更触发了Chrome的安全机制，出于安全考虑Chrome阻断了用户请求，所以可以通过本地设置来规避这个问题。</p><p>网上提供的方式是：<strong>激活当前报错页面，在页面任意位置输入<code>thisisunsafe</code>或<code>badidea</code>即可解除Chrome的安全警报</strong>。个人觉得这种解决方式还挺有意思的，一般人发现不了Google在这里设置了这样的神奇密码。。。。</p><p>最终，我通过在警告页面上键入<code>thisisunsafe</code>顺利进入页面，输入该密码后页面会自动刷新。另一个密码<code>badidea</code>下次遇到类似问题时再尝试吧。</p>]]></content>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码&quot;&gt;&lt;a</summary>
+        
+      
+    
+    
+    
+    <category term="Bugfix" scheme="https://ukeyboard.github.io/categories/Bugfix/"/>
+    
+    
+    <category term="Chrome" scheme="https://ukeyboard.github.io/tags/Chrome/"/>
+    
+    <category term="Issues" scheme="https://ukeyboard.github.io/tags/Issues/"/>
+    
+    <category term="Certificate" scheme="https://ukeyboard.github.io/tags/Certificate/"/>
+    
+  </entry>
   
   <entry>
     <title>Bash strict mode options</title>

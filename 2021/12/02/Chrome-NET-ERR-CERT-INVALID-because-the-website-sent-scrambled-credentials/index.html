@@ -4,17 +4,8 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Bash strict mode options, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
-    <meta name="description" content="Table of Contents
-set -e, -u, -x, -o pipefail
-set -e
-set -x
-set -u
-set -o pipefail
-Setting IFS
-Original Reference
-
-set -">
+    <meta name="keywords" content="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
+    <meta name="description" content="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码问题描述昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -22,7 +13,7 @@ set -">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Bash strict mode options | Jun&#39;s Blog</title>
+    <title>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码 | Jun&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -281,13 +272,13 @@ set -">
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/4.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        Bash strict mode options
+                        解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码
                     </div>
                 </div>
             </div>
@@ -398,12 +389,16 @@ set -">
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Linux/" target="_blank">
-                                <span class="chip bg-color">Linux</span>
+                            <a href="/tags/Chrome/" target="_blank">
+                                <span class="chip bg-color">Chrome</span>
                             </a>
                         
-                            <a href="/tags/Bash/" target="_blank">
-                                <span class="chip bg-color">Bash</span>
+                            <a href="/tags/Issues/" target="_blank">
+                                <span class="chip bg-color">Issues</span>
+                            </a>
+                        
+                            <a href="/tags/Certificate/" target="_blank">
+                                <span class="chip bg-color">Certificate</span>
                             </a>
                         
                     </div>
@@ -414,8 +409,8 @@ set -">
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/wiki/" class="post-category" target="_blank">
-                                wiki
+                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
+                                Bugfix
                             </a>
                         
                     </div>
@@ -426,7 +421,7 @@ set -">
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-11-29
+                    2021-12-02
                 </div>
 
                 
@@ -437,163 +432,15 @@ set -">
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a>Table of Contents</h1><ul>
-<li><a href="#set--e--u--x--o-pipefail">set -e, -u, -x, -o pipefail</a></li>
-<li><a href="#set--e">set -e</a></li>
-<li><a href="#set--x">set -x</a></li>
-<li><a href="#set--u">set -u</a></li>
-<li><a href="#set--o-pipefail">set -o pipefail</a></li>
-<li><a href="#setting-ifs">Setting IFS</a></li>
-<li><a href="#original-reference">Original Reference</a></li>
-</ul>
-<h4 id="set-e-u-x-o-pipefail"><a href="#set-e-u-x-o-pipefail" class="headerlink" title="set -e, -u, -x, -o pipefail"></a>set -e, -u, -x, -o pipefail</h4><ul>
-<li><p>The <code>set</code> lines</p>
-<ul>
-<li><p>These lines deliberately cause your script to fail. Wait, what? Believe me, this is a good thing. </p>
-</li>
-<li><p>With these settings, certain common errors will cause the script to immediately fail, explicitly and loudly. Otherwise, you can get hidden bugs that are discovered only when they blow up in production.</p>
-<p><code>set -euxo pipefail</code> is short for:</p>
-<pre><code>set -e
-set -u
-set -o pipefail
-set -x
-</code></pre>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="set-e"><a href="#set-e" class="headerlink" title="set -e"></a>set -e</h4><ul>
-<li>The <code>set -e</code> option instructs bash to immediately exit if any command [1] has a non-zero exit status. You wouldn’t want to set this for your command-line shell, but in a script it’s massively helpful. In all widely used general-purpose programming languages, an unhandled runtime error  </li>
-</ul>
-<ul>
-<li><p>whether that’s a thrown exception in Java, or a segmentation fault in C, or a syntax error in Python - immediately halts execution of the program; subsequent lines are not executed.</p>
-<ul>
-<li>By default, bash does not do this. This default behavior is exactly what you want if you are using bash on the command line </li>
-<li>you don’t want a typo to log you out! But in a script, you really want the opposite. </li>
-<li>If one line in a script fails, but the last line succeeds, the whole script has a successful exit code. That makes it very easy to miss the error.</li>
-<li>Again, what you want when using bash as your command-line shell and using it in scripts are at odds here. Being intolerant of errors is a lot better in scripts, and that’s what set -e gives you.</li>
-</ul>
-</li>
-</ul>
-<h4 id="set-x"><a href="#set-x" class="headerlink" title="set -x"></a>set -x</h4><ul>
-<li>Enables a mode of the shell where all executed commands are printed to the terminal. In your case it’s clearly used for debugging, which is a typical use case for set -x : printing every command as it is executed may help you to visualize the control flow of the script if it is not functioning as expected.</li>
-</ul>
-<h4 id="set-u"><a href="#set-u" class="headerlink" title="set -u"></a>set -u</h4><ul>
-<li><p>Affects variables. When set, a reference to any variable you haven’t previously defined - with the exceptions of $* and $@ - is an error, and causes the program to immediately exit. Languages like Python, C, Java and more all behave the same way, for all sorts of good reasons. One is so typos don’t create new variables without you realizing it. For example:</p>
-<pre><code>#!/bin/bash
-firstName=&quot;Aaron&quot;
-fullName=&quot;$firstname Maxwell&quot;
-echo &quot;$fullName&quot;
-</code></pre>
-</li>
-<li><p>Take a moment and look. Do you see the error? The right-hand side of the third line says “firstname”, all lowercase, instead of the camel-cased “firstName”. Without the -u option, this will be a silent error. But with the -u option, the script exits on that line with an exit code of 1, printing the message “firstname: unbound variable” to stderr. </p>
-</li>
-<li><p>This is what you want: have it fail explicitly and immediately, rather than create subtle bugs that may be discovered too late.</p>
-</li>
-</ul>
-<h4 id="set-o-pipefail"><a href="#set-o-pipefail" class="headerlink" title="set -o pipefail"></a>set -o pipefail</h4><ul>
-<li><p>This setting prevents errors in a pipeline from being masked. If any command in a pipeline fails, that return code will be used as the return code of the whole pipeline. By default, the pipeline’s return code is that of the last command even if it succeeds. Imagine finding a sorted list of matching lines in a file:</p>
-<pre><code>$ grep some-string /non/existent/file | sort
-grep: /non/existent/file: No such file or directory
-% echo $?
-0
-</code></pre>
-</li>
-</ul>
-<ul>
-<li><p>Here, grep has an exit code of 2, writes an error message to stderr, and an empty string to stdout. </p>
-</li>
-<li><p>This empty string is then passed through sort, which happily accepts it as valid input, and returns a status code of 0. </p>
-</li>
-<li><p>This is fine for a command line, but bad for a shell script: you almost certainly want the script to exit right then with a nonzero exit code… like this:</p>
-<pre><code>$ set -o pipefail
-$ grep some-string /non/existent/file | sort
-grep: /non/existent/file: No such file or directory
-$ echo $?
-2
-</code></pre>
-<h4 id="Setting-IFS"><a href="#Setting-IFS" class="headerlink" title="Setting IFS"></a>Setting IFS</h4></li>
-</ul>
-<ul>
-<li><p>The IFS variable - which stands for Internal Field Separator - controls what Bash calls word splitting. When set to a string, each character in the string is considered by Bash to separate words. This governs how bash will iterate through a sequence. For example, this script:</p>
-<pre><code>#!/bin/bash
-IFS=$&#39; &#39;
-items=&quot;a b c&quot;
-for x in $items; do
-    echo &quot;$x&quot;
-done
-
-IFS=$&#39;\n&#39;
-for y in $items; do
-    echo &quot;$y&quot;
-done
-... will print out this:
-
-a
-b
-c
-a b c
-</code></pre>
-</li>
-<li><p>In the first for loop, IFS is set to $’ ‘. (The $’…’ syntax creates a string, with backslash-escaped characters replaced with special characters - like “\t” for tab and “\n” for newline.) Within the for loops, x and y are set to whatever bash considers a “word” in the original sequence. </p>
-</li>
-<li><p>For the first loop, IFS is a space, meaning that words are separated by a space character. </p>
-</li>
-<li><p>For the second loop, “words” are separated by a newline, which means bash considers the whole value of “items” as a single word. If IFS is more than one character, splitting will be done on any of those characters.</p>
-</li>
-<li><p>Got all that? The next question is, why are we setting IFS to a string consisting of a tab character and a newline? Because it gives us better behavior when iterating over a loop. By “better”, I mean “much less likely to cause surprising and confusing bugs”. This is apparent in working with bash arrays:</p>
-<pre><code>#!/bin/bash
-names=(
-&quot;Aaron Maxwell&quot;
-&quot;Wayne Gretzky&quot;
-&quot;David Beckham&quot;
-)
-
-echo &quot;With default IFS value...&quot;
-for name in $&#123;names[@]&#125;; do
-echo &quot;$name&quot;
-done
-
-echo &quot;&quot;
-echo &quot;With strict-mode IFS value...&quot;
-IFS=$&#39;\n\t&#39;
-for name in $&#123;names[@]&#125;; do
-echo &quot;$name&quot;
-done
-</code></pre>
-<pre><code>## Output
-With default IFS value...
-Aaron
-Maxwell
-Wayne
-Gretzky
-David
-Beckham
-
-With strict-mode IFS value...
-Aaron Maxwell
-Wayne Gretzky
-David Beckham
-</code></pre>
-<p>Or consider a script that takes filenames as command line arguments:</p>
-<pre><code>for arg in $@; do
-    echo &quot;doing something with file: $arg&quot;
-done
-</code></pre>
-</li>
-<li><p>If you invoke this as myscript.sh notes todo-list ‘My Resume.doc’, then with the default IFS value, the third argument will be mis-parsed as two separate files - named “My” and “Resume.doc”. When actually it’s a file that has a space in it, named “My Resume.doc”.</p>
-</li>
-<li><p>Which behavior is more generally useful? The second, of course - where we have the ability to not split on spaces. If we have an array of strings that in general contain spaces, we normally want to iterate through them item by item, and not split an individual item into several.</p>
-</li>
-<li><p>Setting IFS to $’\n\t’ means that word splitting will happen only on newlines and tab characters. This very often produces useful splitting behavior. </p>
-</li>
-<li><p>By default, bash sets this to $’ \n\t’ - space, newline, tab - which is too eager.</p>
-</li>
-</ul>
-<h2 id="Original-Reference"><a href="#Original-Reference" class="headerlink" title="Original Reference"></a>Original Reference</h2><ul>
-<li><strong>Maxwell, A. Unofficial-bash-strict-mode. Retrieved 2018, from <a target="_blank" rel="noopener" href="http://redsymbol.net/articles/unofficial-bash-strict-mode/">http://redsymbol.net/articles/unofficial-bash-strict-mode/</a></strong></li>
-<li><a target="_blank" rel="noopener" href="https://gist.github.com/mohanpedala/1e2ff5661761d3abd0385e8223e16425">https://gist.github.com/mohanpedala/1e2ff5661761d3abd0385e8223e16425</a></li>
-</ul>
+                <h2 id="解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码"><a href="#解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码" class="headerlink" title="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码"></a>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</h2><h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接报类似下面这样的错误：</p>
+<blockquote>
+<p>You cannot visit xxxxxx right now because the website sent scrambled credentials that Google Chrome cannot process. Network errors and attacks are usually temporary, so this page will probably work later.</p>
+</blockquote>
+<p>具体情况如下图所示：<br><img src="https://docs.microsoft.com/answers/storage/attachments/12039-screen-shot-2020-07-14-at-30445-pm.png" alt="Chrome NET::ERR_CERT_INVALID"></p>
+<p>通常出现这种状况Chrome会在页面折叠起来的“高级”或”Advance”里提供一个可以访问的连接，尽管存在风险。但是，这次没有任何可以点击的连接，只有 <code>NET::ERR_CERT_INVALID</code>错误。</p>
+<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>从页面提供的信息来看是因为证书的变更触发了Chrome的安全机制，出于安全考虑Chrome阻断了用户请求，所以可以通过本地设置来规避这个问题。</p>
+<p>网上提供的方式是：<strong>激活当前报错页面，在页面任意位置输入<code>thisisunsafe</code>或<code>badidea</code>即可解除Chrome的安全警报</strong>。个人觉得这种解决方式还挺有意思的，一般人发现不了Google在这里设置了这样的神奇密码。。。。</p>
+<p>最终，我通过在警告页面上键入<code>thisisunsafe</code>顺利进入页面，输入该密码后页面会自动刷新。另一个密码<code>badidea</code>下次遇到类似问题时再尝试吧。</p>
 
             </div>
             <hr/>
@@ -628,9 +475,9 @@ done
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《Bash strict mode options》
+                    《解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/11/29/bash-strict-mode/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/" property="cc:attributionName"
                rel="cc:attributionURL">
                 Jun He
             </a> 采用
@@ -671,7 +518,7 @@ done
         repo: 'gitalk',
         owner: 'UKeyboard',
         admin: ["UKeyboard"],
-        id: '2021-11-29T19-51-46',
+        id: '2021-12-02T14-33-40',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -692,9 +539,10 @@ done
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/">
                     <div class="card-image">
@@ -712,9 +560,9 @@ done
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2021-12-02
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-12-02
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -727,6 +575,7 @@ done
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -753,31 +602,40 @@ done
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/28/Elasticsearch%E6%8A%A5org-elasticsearch-bootstrap-StartupException-ElasticsearchException%E9%94%99%E8%AF%AF/">
+                <a href="/2021/11/29/bash-strict-mode/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Bash strict mode options">
                         
-                        <span class="card-title">Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误</span>
+                        <span class="card-title">Bash strict mode options</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Elasticsearch报org.elasticsearch.bootstrap.StartupException:ElasticsearchException错误问题说明在部署Elasticsearch时，我们通常要在配置文件/usr/
+                            Table of Contents
+set -e, -u, -x, -o pipefail
+set -e
+set -x
+set -u
+set -o pipefail
+Setting IFS
+Original Reference
+
+set -
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-28
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-29
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
-                                    Bugfix
+                            <a href="/categories/wiki/" class="post-category" target="_blank">
+                                    wiki
                                 </a>
                             
                             
@@ -787,12 +645,12 @@ done
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Elasticsearch/" target="_blank">
-                        <span class="chip bg-color">Elasticsearch</span>
+                    <a href="/tags/Linux/" target="_blank">
+                        <span class="chip bg-color">Linux</span>
                     </a>
                     
-                    <a href="/tags/Issues/" target="_blank">
-                        <span class="chip bg-color">Issues</span>
+                    <a href="/tags/Bash/" target="_blank">
+                        <span class="chip bg-color">Bash</span>
                     </a>
                     
                 </div>
