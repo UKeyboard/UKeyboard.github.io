@@ -4,8 +4,9 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
-    <meta name="description" content="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码问题描述昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接">
+    <meta name="keywords" content="OpenVPN支持LDAP登陆认证, hejun,jun,junhe,HFUT,Hefei University of Technology,lmc,LMC, Lab of Media Computing, UKeyboard, ukeyboard, Junaid Ukeyboard">
+    <meta name="description" content="通常情况下OpenVPN的用户认证是基于系统用户信息的，比如我们在服务器A上搭建OpenVPN的目的是要允许该机器上的有效用户能够通过VPN连接进服务器A所在的网络，实现网络受限资源的自由访问。
+OpenVPN服务端（即server.ovp">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="renderer" content="webkit|ie-stand|ie-comp">
@@ -13,7 +14,7 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码 | Jun&#39;s Blog</title>
+    <title>OpenVPN支持LDAP登陆认证 | Jun&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/font-awesome.min.css">
@@ -272,13 +273,13 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
     <div class="container">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
                     <div class="description center-align post-title">
-                        解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码
+                        OpenVPN支持LDAP登陆认证
                     </div>
                 </div>
             </div>
@@ -389,16 +390,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Chrome/" target="_blank">
-                                <span class="chip bg-color">Chrome</span>
+                            <a href="/tags/OpenVPN/" target="_blank">
+                                <span class="chip bg-color">OpenVPN</span>
                             </a>
                         
-                            <a href="/tags/Issues/" target="_blank">
-                                <span class="chip bg-color">Issues</span>
-                            </a>
-                        
-                            <a href="/tags/Certificate/" target="_blank">
-                                <span class="chip bg-color">Certificate</span>
+                            <a href="/tags/VPN/" target="_blank">
+                                <span class="chip bg-color">VPN</span>
                             </a>
                         
                     </div>
@@ -409,8 +406,8 @@
                     <div class="post-cate">
                         <i class="fa fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
-                                Bugfix
+                            <a href="/categories/Tools/" class="post-category" target="_blank">
+                                Tools
                             </a>
                         
                     </div>
@@ -421,7 +418,7 @@
             <div class="post-info">
                 <div class="post-date info-break-policy">
                     <i class="fa fa-calendar-minus-o fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-12-02
+                    2022-01-24
                 </div>
 
                 
@@ -432,15 +429,137 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码"><a href="#解决Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials问题的神奇密码" class="headerlink" title="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码"></a>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</h2><h4 id="问题描述"><a href="#问题描述" class="headerlink" title="问题描述"></a>问题描述</h4><p>昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接报类似下面这样的错误：</p>
-<blockquote>
-<p>You cannot visit xxxxxx right now because the website sent scrambled credentials that Google Chrome cannot process. Network errors and attacks are usually temporary, so this page will probably work later.</p>
-</blockquote>
-<p>具体情况如下图所示：<br><img src="https://docs.microsoft.com/answers/storage/attachments/12039-screen-shot-2020-07-14-at-30445-pm.png" alt="Chrome NET::ERR_CERT_INVALID"></p>
-<p>通常出现这种状况Chrome会在页面折叠起来的“高级”或”Advance”里提供一个可以访问的连接，尽管存在风险。但是，这次没有任何可以点击的连接，只有 <code>NET::ERR_CERT_INVALID</code>错误。</p>
-<h4 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h4><p>从页面提供的信息来看是因为证书的变更触发了Chrome的安全机制，出于安全考虑Chrome阻断了用户请求，所以可以通过本地设置来规避这个问题。</p>
-<p>网上提供的方式是：<strong>激活当前报错页面，在页面任意位置输入<code>thisisunsafe</code>或<code>badidea</code>即可解除Chrome的安全警报</strong>。个人觉得这种解决方式还挺有意思的，一般人发现不了Google在这里设置了这样的神奇密码。。。。</p>
-<p>最终，我通过在警告页面上键入<code>thisisunsafe</code>顺利进入页面，输入该密码后页面会自动刷新。另一个密码<code>badidea</code>下次遇到类似问题时再尝试吧。</p>
+                <p>通常情况下OpenVPN的用户认证是基于系统用户信息的，比如我们在服务器A上搭建OpenVPN的目的是要允许该机器上的有效用户能够通过VPN连接进服务器A所在的网络，实现网络受限资源的自由访问。</p>
+<p>OpenVPN服务端（即<code>server.ovpn</code>）中可以通过设置下面配置允许VPN的宿主机（例如上文中的服务器A）上用户在其他地方通过VPN和该机器建立连接：</p>
+<pre><code># Enable OTP+PAM for user authentication
+# Only existing system user can use the VPN network
+plugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login
+</code></pre>
+<p>但这种方式有一个问题：它只允许宿主机系统中现有的用户使用。在云服务/微服务环境下，OpenVPN通常是运行在docker/container环境中的，系统中并没有所谓具有实际意义的现有用户，因此上述这种认证方式显然限制了VPN的可用性。</p>
+<p>为使得在云服务/微服务环境下能正常使用VPN，目前可行的方式有三种：</p>
+<ol>
+<li>在docker/container内基于NIS从外部引入用户认证信息，用于VPN用户认证；</li>
+<li>在docker/container内维护一个有效用户表，通过<code>auth-user-pass-verify</code>进行VPN用户认证；</li>
+<li>在docker/container内基于LDAP从外部引入用户认证信息，用于VPN用户认证。</li>
+</ol>
+<p>在这三种方式中，LDAP可结合GUI界面方便用户管理，存在维护方面的优势。本文我们将主要介绍，如何配置OpenVPN基于LDAP完成用户认证。</p>
+<p>配置OpenVPN基于LDAP完成用户认证其实十分简单，分为三步：</p>
+<ol>
+<li>配置LDAP服务；</li>
+<li>安装<code>openvpn-auth-ldap</code>并配置连接文件；</li>
+<li>配置OpenVPN服务端（如server.ovpn）使用ldap进行验证。</li>
+</ol>
+<p>这里我们假设LDAP服务已经配置完成，这在大多数生产环境中是可以预期的，所以我们从第二步开始。</p>
+<p>首先，我们通过下面命令安装<code>openvpn-auth-ldap</code>，</p>
+<pre><code># For Alpine linux
+apk add openvpn openvpn-auth-ldap
+
+# For Ubuntu linux
+apt install openvpn openvpn-auth-ldap
+</code></pre>
+<p>上述指令会在为我们安装openvpn程序和openvpn LDAP认证插件。</p>
+<p>OpenVPN LDAP插件主要包括两个文件：</p>
+<pre><code>/usr/lib/openvpn-auth-ldap.so # 认证lib文件
+/etc/openvpn/auth-ldap.conf # ldap认证配置文件
+</code></pre>
+<p>配置文件<code>/etc/openvpn/auth-ldap.conf</code>的默认内容如下：</p>
+<pre><code>## Tips：这里是/etc/openvpn/auth-ldap.conf文件默认内容，需修改。
+&lt;LDAP&gt;
+  # LDAP server URL
+  URL   ldap://ldap1.example.org
+
+  # Bind DN (If your LDAP server doesn&#39;t support anonymous binds)
+  # BindDN    uid=Manager,ou=People,dc=example,dc=com
+
+  # Bind Password
+  # Password  SecretPassword
+
+  # Network timeout (in seconds)
+  Timeout   15
+
+  # Enable Start TLS
+  TLSEnable yes
+
+  # Follow LDAP Referrals (anonymously)
+  FollowReferrals no
+
+  # TLS CA Certificate File
+  TLSCACertFile /etc/ssl/certs/ca-certificates.crt
+
+  # TLS CA Certificate Directory
+  TLSCACertDir  /etc/ssl/certs
+
+  # Client Certificate and key
+  # If TLS client authentication is required
+  TLSCertFile /etc/ssl/client-cert.pem
+  TLSKeyFile  /etc/ssl/client-key.pem
+
+  # Cipher Suite
+  # The defaults are usually fine here
+  # TLSCipherSuite  ALL:!ADH:@STRENGTH
+&lt;/LDAP&gt;
+
+&lt;Authorization&gt;
+  # Base DN
+  BaseDN    &quot;ou=People,dc=example,dc=com&quot;
+
+  # User Search Filter
+  SearchFilter  &quot;(&amp;(uid=%u)(accountStatus=active))&quot;
+
+  # Require Group Membership
+  RequireGroup  false
+
+  # Add non-group members to a PF table (disabled)
+  #PFTable  ips_vpn_users
+
+  # Uncomment and set to true to support OpenVPN Challenge/Response
+  #PasswordIsCR false
+  &lt;Group&gt;
+    # Default is true. Match full user DN if true, uid only if false.
+    # RFC2307bis   true
+
+    # Default is true. Uncomment and set to false if you want to use a Search operation to determine group
+    # membership instead of Compare. Lower performance, so Compare should generally be used, but Search is
+    # required in certain LDAP environments.
+    # UseCompareOperation   true
+
+    BaseDN    &quot;ou=Groups,dc=example,dc=com&quot;
+    SearchFilter  &quot;(|(cn=developers)(cn=artists))&quot;
+    MemberAttribute uniqueMember
+    # Add group members to a PF table (disabled)
+    #PFTable  ips_vpn_eng
+  &lt;/Group&gt;
+&lt;/Authorization&gt;
+</code></pre>
+<p>我们需要将其中的内容替换成自己的LDAP服务相关配置，例如</p>
+<pre><code>&lt;LDAP&gt;
+  URL   ldap://ldap.example.cn
+  BindDN    cn=users,dc=example,dc=cn
+  Password  123456
+  Timeout   15
+  TLSEnable no
+  FollowReferrals no
+&lt;/LDAP&gt;
+&lt;Authorization&gt;
+  BaseDN    &quot;dc=example,dc=cn&quot;
+  SearchFilter  &quot;uid=%u&quot;
+  RequireGroup  false
+&lt;/Authorization&gt;
+</code></pre>
+<p>完成上述配置后需进一步修改OpenVPN服务端配置文件（server.ovpn)如下以使用LDAP进行VPN用户认证：</p>
+<pre><code>plugin /usr/lib/openvpn-auth-ldap.so &quot;/etc/openvpn/auth-ldap.conf&quot;
+</code></pre>
+<p>至此，OpenVPN使用LDAP进行用户认证相关内容就介绍完了。</p>
+<p>如果在使用过程中出现认证始终无法完成的情况，可以通过一下几个方面排查：</p>
+<ol>
+<li>服务端是否正常启动，如果正常启动可通过<code>tail -F openvpn.log</code>查看日志信息；</li>
+<li>客户端证书是否正确并在有效期内（证书错误在客户端日志中应有相应说明）；</li>
+<li>VPN服务端是否能和LDAP服务正常通信，这一点可以在服务端通过命令<code>ldapsearch</code>验证。</li>
+</ol>
+<p>使用命令<code>ldapsearch</code>验证LDAP服务的方式如下：</p>
+<pre><code>ldapsearch -x -H ldap://ldap.example.cn -D &quot;cn=users,dc=example,dc=cn&quot; -w 123456 -b &quot;dc=example,dc=cn&quot; &quot;uid=test&quot;
+</code></pre>
+<p>结合<code>/etc/openvpn/auth-ldap.conf</code>对上述示例指令进行相应修改后，如果指令能够返回正确的查询结果说明<code>/etc/openvpn/auth-ldap.conf</code>配置文件没有问题。</p>
 
             </div>
             <hr/>
@@ -475,9 +594,9 @@
             <br/>
             <span xmlns:dct="http://purl.org/dc/terms/" href="http://purl.org/dc/dcmitype/Text"
                   property="dct:title" rel="dct:type">
-                    《解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码》
+                    《OpenVPN支持LDAP登陆认证》
                 </span> 由
-            <a xmlns:cc="http://creativecommons.org/ns#" href="/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/" property="cc:attributionName"
+            <a xmlns:cc="http://creativecommons.org/ns#" href="/2022/01/24/OpenVPN%E6%94%AF%E6%8C%81LDAP%E7%99%BB%E9%99%86%E8%AE%A4%E8%AF%81/" property="cc:attributionName"
                rel="cc:attributionURL">
                 Jun He
             </a> 采用
@@ -518,7 +637,7 @@
         repo: 'gitalk',
         owner: 'UKeyboard',
         admin: ["UKeyboard"],
-        id: '2021-12-02T14-33-40',
+        id: '2022-01-24T10-40-12',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -539,9 +658,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fa fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="fa fa-dot-circle-o"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2022/01/24/OpenVPN%E6%94%AF%E6%8C%81LDAP%E7%99%BB%E9%99%86%E8%AE%A4%E8%AF%81/">
                     <div class="card-image">
@@ -560,9 +680,9 @@ OpenVPN服务端（即server.ovp
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="fa fa-clock-o fa-fw icon-date"></i>2022-01-24
-                        </span>
+                            <span class="publish-date">
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2022-01-24
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
@@ -575,6 +695,7 @@ OpenVPN服务端（即server.ovp
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -597,40 +718,31 @@ OpenVPN服务端（即server.ovp
                 下一篇&nbsp;<i class="fa fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/11/29/bash-strict-mode/">
+                <a href="/2021/12/02/Chrome-NET-ERR-CERT-INVALID-because-the-website-sent-scrambled-credentials/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Bash strict mode options">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码">
                         
-                        <span class="card-title">Bash strict mode options</span>
+                        <span class="card-title">解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Table of Contents
-set -e, -u, -x, -o pipefail
-set -e
-set -x
-set -u
-set -o pipefail
-Setting IFS
-Original Reference
-
-set -
+                            解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码问题描述昨天服务器的证书更新后，客户端突然就不能访问了，Chrome直接
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-11-29
+                                <i class="fa fa-clock-o fa-fw icon-date"></i>2021-12-02
                             </span>
                         <span class="publish-author">
                             
                             <i class="fa fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/wiki/" class="post-category" target="_blank">
-                                    wiki
+                            <a href="/categories/Bugfix/" class="post-category" target="_blank">
+                                    Bugfix
                                 </a>
                             
                             
@@ -640,12 +752,16 @@ set -
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Linux/" target="_blank">
-                        <span class="chip bg-color">Linux</span>
+                    <a href="/tags/Chrome/" target="_blank">
+                        <span class="chip bg-color">Chrome</span>
                     </a>
                     
-                    <a href="/tags/Bash/" target="_blank">
-                        <span class="chip bg-color">Bash</span>
+                    <a href="/tags/Issues/" target="_blank">
+                        <span class="chip bg-color">Issues</span>
+                    </a>
+                    
+                    <a href="/tags/Certificate/" target="_blank">
+                        <span class="chip bg-color">Certificate</span>
                     </a>
                     
                 </div>

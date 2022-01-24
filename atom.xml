@@ -6,7 +6,7 @@
   <link href="https://ukeyboard.github.io/atom.xml" rel="self"/>
   
   <link href="https://ukeyboard.github.io/"/>
-  <updated>2021-12-02T06:53:17.992Z</updated>
+  <updated>2022-01-24T03:39:10.698Z</updated>
   <id>https://ukeyboard.github.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>OpenVPN支持LDAP登陆认证</title>
+    <link href="https://ukeyboard.github.io/2022/01/24/OpenVPN%E6%94%AF%E6%8C%81LDAP%E7%99%BB%E9%99%86%E8%AE%A4%E8%AF%81/"/>
+    <id>https://ukeyboard.github.io/2022/01/24/OpenVPN%E6%94%AF%E6%8C%81LDAP%E7%99%BB%E9%99%86%E8%AE%A4%E8%AF%81/</id>
+    <published>2022-01-24T02:40:12.000Z</published>
+    <updated>2022-01-24T03:39:10.698Z</updated>
+    
+    <content type="html"><![CDATA[<p>通常情况下OpenVPN的用户认证是基于系统用户信息的，比如我们在服务器A上搭建OpenVPN的目的是要允许该机器上的有效用户能够通过VPN连接进服务器A所在的网络，实现网络受限资源的自由访问。</p><p>OpenVPN服务端（即<code>server.ovpn</code>）中可以通过设置下面配置允许VPN的宿主机（例如上文中的服务器A）上用户在其他地方通过VPN和该机器建立连接：</p><pre><code># Enable OTP+PAM for user authentication# Only existing system user can use the VPN networkplugin /usr/lib/openvpn/openvpn-plugin-auth-pam.so login</code></pre><p>但这种方式有一个问题：它只允许宿主机系统中现有的用户使用。在云服务/微服务环境下，OpenVPN通常是运行在docker/container环境中的，系统中并没有所谓具有实际意义的现有用户，因此上述这种认证方式显然限制了VPN的可用性。</p><p>为使得在云服务/微服务环境下能正常使用VPN，目前可行的方式有三种：</p><ol><li>在docker/container内基于NIS从外部引入用户认证信息，用于VPN用户认证；</li><li>在docker/container内维护一个有效用户表，通过<code>auth-user-pass-verify</code>进行VPN用户认证；</li><li>在docker/container内基于LDAP从外部引入用户认证信息，用于VPN用户认证。</li></ol><p>在这三种方式中，LDAP可结合GUI界面方便用户管理，存在维护方面的优势。本文我们将主要介绍，如何配置OpenVPN基于LDAP完成用户认证。</p><p>配置OpenVPN基于LDAP完成用户认证其实十分简单，分为三步：</p><ol><li>配置LDAP服务；</li><li>安装<code>openvpn-auth-ldap</code>并配置连接文件；</li><li>配置OpenVPN服务端（如server.ovpn）使用ldap进行验证。</li></ol><p>这里我们假设LDAP服务已经配置完成，这在大多数生产环境中是可以预期的，所以我们从第二步开始。</p><p>首先，我们通过下面命令安装<code>openvpn-auth-ldap</code>，</p><pre><code># For Alpine linuxapk add openvpn openvpn-auth-ldap# For Ubuntu linuxapt install openvpn openvpn-auth-ldap</code></pre><p>上述指令会在为我们安装openvpn程序和openvpn LDAP认证插件。</p><p>OpenVPN LDAP插件主要包括两个文件：</p><pre><code>/usr/lib/openvpn-auth-ldap.so # 认证lib文件/etc/openvpn/auth-ldap.conf # ldap认证配置文件</code></pre><p>配置文件<code>/etc/openvpn/auth-ldap.conf</code>的默认内容如下：</p><pre><code>## Tips：这里是/etc/openvpn/auth-ldap.conf文件默认内容，需修改。&lt;LDAP&gt;  # LDAP server URL  URL   ldap://ldap1.example.org  # Bind DN (If your LDAP server doesn&#39;t support anonymous binds)  # BindDN    uid=Manager,ou=People,dc=example,dc=com  # Bind Password  # Password  SecretPassword  # Network timeout (in seconds)  Timeout   15  # Enable Start TLS  TLSEnable yes  # Follow LDAP Referrals (anonymously)  FollowReferrals no  # TLS CA Certificate File  TLSCACertFile /etc/ssl/certs/ca-certificates.crt  # TLS CA Certificate Directory  TLSCACertDir  /etc/ssl/certs  # Client Certificate and key  # If TLS client authentication is required  TLSCertFile /etc/ssl/client-cert.pem  TLSKeyFile  /etc/ssl/client-key.pem  # Cipher Suite  # The defaults are usually fine here  # TLSCipherSuite  ALL:!ADH:@STRENGTH&lt;/LDAP&gt;&lt;Authorization&gt;  # Base DN  BaseDN    &quot;ou=People,dc=example,dc=com&quot;  # User Search Filter  SearchFilter  &quot;(&amp;(uid=%u)(accountStatus=active))&quot;  # Require Group Membership  RequireGroup  false  # Add non-group members to a PF table (disabled)  #PFTable  ips_vpn_users  # Uncomment and set to true to support OpenVPN Challenge/Response  #PasswordIsCR false  &lt;Group&gt;    # Default is true. Match full user DN if true, uid only if false.    # RFC2307bis   true    # Default is true. Uncomment and set to false if you want to use a Search operation to determine group    # membership instead of Compare. Lower performance, so Compare should generally be used, but Search is    # required in certain LDAP environments.    # UseCompareOperation   true    BaseDN    &quot;ou=Groups,dc=example,dc=com&quot;    SearchFilter  &quot;(|(cn=developers)(cn=artists))&quot;    MemberAttribute uniqueMember    # Add group members to a PF table (disabled)    #PFTable  ips_vpn_eng  &lt;/Group&gt;&lt;/Authorization&gt;</code></pre><p>我们需要将其中的内容替换成自己的LDAP服务相关配置，例如</p><pre><code>&lt;LDAP&gt;  URL   ldap://ldap.example.cn  BindDN    cn=users,dc=example,dc=cn  Password  123456  Timeout   15  TLSEnable no  FollowReferrals no&lt;/LDAP&gt;&lt;Authorization&gt;  BaseDN    &quot;dc=example,dc=cn&quot;  SearchFilter  &quot;uid=%u&quot;  RequireGroup  false&lt;/Authorization&gt;</code></pre><p>完成上述配置后需进一步修改OpenVPN服务端配置文件（server.ovpn)如下以使用LDAP进行VPN用户认证：</p><pre><code>plugin /usr/lib/openvpn-auth-ldap.so &quot;/etc/openvpn/auth-ldap.conf&quot;</code></pre><p>至此，OpenVPN使用LDAP进行用户认证相关内容就介绍完了。</p><p>如果在使用过程中出现认证始终无法完成的情况，可以通过一下几个方面排查：</p><ol><li>服务端是否正常启动，如果正常启动可通过<code>tail -F openvpn.log</code>查看日志信息；</li><li>客户端证书是否正确并在有效期内（证书错误在客户端日志中应有相应说明）；</li><li>VPN服务端是否能和LDAP服务正常通信，这一点可以在服务端通过命令<code>ldapsearch</code>验证。</li></ol><p>使用命令<code>ldapsearch</code>验证LDAP服务的方式如下：</p><pre><code>ldapsearch -x -H ldap://ldap.example.cn -D &quot;cn=users,dc=example,dc=cn&quot; -w 123456 -b &quot;dc=example,dc=cn&quot; &quot;uid=test&quot;</code></pre><p>结合<code>/etc/openvpn/auth-ldap.conf</code>对上述示例指令进行相应修改后，如果指令能够返回正确的查询结果说明<code>/etc/openvpn/auth-ldap.conf</code>配置文件没有问题。</p>]]></content>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;通常情况下OpenVPN的用户认证是基于系统用户信息的，比如我们在服务器A上搭建OpenVPN的目的是要允许该机器上的有效用户能够通过VPN连接进服务器A所在的网络，实现网络受限资源的自由访问。&lt;/p&gt;
+&lt;p&gt;OpenVPN服务端（即&lt;code&gt;server.ovpn&lt;/c</summary>
+        
+      
+    
+    
+    
+    <category term="Tools" scheme="https://ukeyboard.github.io/categories/Tools/"/>
+    
+    
+    <category term="OpenVPN" scheme="https://ukeyboard.github.io/tags/OpenVPN/"/>
+    
+    <category term="VPN" scheme="https://ukeyboard.github.io/tags/VPN/"/>
+    
+  </entry>
   
   <entry>
     <title>解决Chrome NET::ERR_CERT_INVALID because the website sent scrambled credentials问题的神奇密码</title>
